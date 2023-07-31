@@ -1,2 +1,2 @@
 const email = 'contact@energyearly.com'
-const links = ['Latest','History','Subscribe' ,'Request','Blog']
+const links = ['Index','History','Subscribe' ,'Request','Blog']

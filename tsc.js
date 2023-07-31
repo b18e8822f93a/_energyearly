@@ -170,7 +170,7 @@ var FrameModule;
     function header(links) {
         let buttons = links.map(o => {
             return `<li class="nav-item">
-                                    <a class="nav-link link_off" id="bt${o}Page" href="${o}.html">${o}</a>
+                                    <a class="nav-link link_off" id="bt${o}Page" href="${o}">${o}</a>
                                     </li>`;
         });
         console.log(buttons);
@@ -241,4 +241,3 @@ function setTemplate() {
     document.getElementById(buttonId).classList.remove('link_off');
     document.getElementById(buttonId).classList.add('link_on');
 }
-//# sourceMappingURL=tsc.js.map
