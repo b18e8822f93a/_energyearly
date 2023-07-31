@@ -170,7 +170,7 @@ var FrameModule;
     function header(links) {
         let buttons = links.map(o => {
             return `<li class="nav-item">
-                                    <a class="nav-link link_off" id="bt${o}Page" href="${o}">${o}</a>
+                                    <a class="nav-link link_off" id="bt${o}Page" href="${o.toLowerCase()}">${o}</a>
                                     </li>`;
         });
         console.log(buttons);
