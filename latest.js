@@ -1,4 +1,4 @@
-const btId = 'Latest'
+const btId = 'Index'
 const getHeader = () => 'Latest';
 const getTitle = () => 'EnergyEarly - Latest';
 function content() {
