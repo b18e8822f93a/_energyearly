@@ -111,28 +111,7 @@ function addContentToPage(jsonIn) {
   document.getElementById('dv1').innerHTML = table;
 }
 
-
-function get() {
-
-
-  let url = "https://script.google.com/macros/s/AKfycbxEEgvMb0TQUk3bqp-DAnXRgkYAKmvjF0A6HvHJRFQsyweBbJbn0EPuhdMqxJMRhpJU/exec?tab=feeds"
-
-
-  fetch(url, {
-    method: 'GET',
-   
-  })
-    .then(res => res.json())
-    .then(res => addContentToPage(res));
-}
-
-function onPageLoaded() {get()}
-
-
-
-
-
-
+function onPageLoaded() {getSources().then(res => addContentToPage(res))}
 
 function loadData(e) {
   console.log(e);

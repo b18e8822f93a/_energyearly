@@ -33,20 +33,64 @@ const tablesModule = {
     },
 };
 const datesModule = {
+    dateOnlyString: function (o) {
+        return o.toISOString().substring(0, 10);
+    },
+    words: function (o) {
+        let ms = Date.parse(o);
+        let date = new Date(ms);
+        const today = new Date(new Date().toDateString());
+        const tomorrow = new Date(today.toDateString());
+        const yesterday = new Date(today.toDateString());
+        today.setDate(tomorrow.getDate() + 1);
+        tomorrow.setDate(tomorrow.getDate() + 2);
+        yesterday.setDate(tomorrow.getDate());
+        if (date < yesterday)
+            return this.dateOnlyString(date);
+        if (date < today)
+            return "today";
+        else if (date < tomorrow)
+            return "tomorrow";
+        else
+            return this.dateOnlyString(date);
+    },
+    inMinutes: function (d1, d2) {
+        var t2 = d2.getTime();
+        var t1 = d1.getTime();
+        return Math.round((t2 - t1) / (60 * 1000));
+    },
+    inHours: function (d1, d2) {
+        var t2 = d2.getTime();
+        var t1 = d1.getTime();
+        return Math.round((t2 - t1) / (3600 * 1000));
+    },
     inDays: function (d1, d2) {
         var t2 = d2.getTime();
         var t1 = d1.getTime();
         return parseInt((t2 - t1) / (24 * 3600 * 1000));
     },
     differenceFromNow: function (o) {
-        let ms = Date.parse(o.timestamp.replaceAll('_', ' '));
-        var date = new Date(ms);
+        let ms = Date.parse(o.replaceAll('_', ' '));
+        let date = new Date(ms);
         let now = new Date(Date.now());
         let difference = this.inDays(date, now);
         return difference;
     },
+    differenceFromNowInHours: function (o) {
+        let ms = Date.parse(o);
+        let date = new Date(ms);
+        let now = new Date(Date.now());
+        let difference = this.inHours(date, now) * -1;
+        return difference;
+    },
+    differenceFromNowInMinutes: function (o) {
+        let date = new Date(o);
+        let now = new Date(Date.now());
+        let difference = this.inMinutes(date, now) * -1;
+        return difference;
+    },
     stringToDate: function (o) {
-        let ms = Date.parse(o.timestamp.replaceAll('_', ' '));
+        let ms = Date.parse(o.replaceAll('_', ' '));
         var date = new Date(ms);
         var newDate = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'medium' }).format(date);
         return newDate;
@@ -121,10 +165,10 @@ var ThemeModule;
 var BlogModule;
 (function (BlogModule) {
     function makeBlogCardFromType(blogEntry) {
-        return makeBlogCard(blogEntry.title, blogEntry.txt, blogEntry.date, blogEntry.tag1);
+        return makeBlogCard(blogEntry.title, blogEntry.txt, blogEntry.date, blogEntry.tag1, blogEntry.tag2);
     }
     BlogModule.makeBlogCardFromType = makeBlogCardFromType;
-    function makeBlogCard(title, txt, date, tag1) {
+    function makeBlogCard(title, txt, date, tag1, tag2) {
         let html = `<div class="card mb-3" data-all="card" data-unique="job" style="border-color:#ee12cd">
     <div class="card-header d-flex flex-row justify-content-between align-items-center" style="border-color:#ee12cd">${title}
     <div class="mb-auto"></div></div>
@@ -133,8 +177,8 @@ var BlogModule;
     </div>
     <div class="card-footer text-muted d-flex flex-row  align-items-center">
       <span style="margin-right:auto">${date}</span>
-      <span class="tagSpan" style="background-color:#ee12cd; margin-left:3px">${tag1}</span>
-      
+      <span class="tagSpan" style="background-color:#ee12cd; margin-left:3px">${tag2}</span>
+      <span class="tagSpan" style="background-color:#6666ff; margin-left:3px">${tag1}</span>
     </div>
     </div>`;
         return html;
@@ -167,11 +211,10 @@ var FrameModule;
         return html;
     }
     FrameModule.footer = footer;
-    function header(links) {
+    function header(links, isLinkSuffix) {
+        let linkSuffix = isLinkSuffix ? ".html" : "";
         let buttons = links.map(o => {
-            return `<li class="nav-item">
-                                    <a class="nav-link link_off" id="bt${o}Page" href="${o.toLowerCase()}">${o}</a>
-                                    </li>`;
+            return `<li class="nav-item"><a class="nav-link link_off" id="bt${o}Page" href="${o.toLowerCase() + linkSuffix}">${o}</a></li>`;
         });
         console.log(buttons);
         let html = `<header>
@@ -229,15 +272,18 @@ var FrameModule;
 })(FrameModule || (FrameModule = {}));
 function setTemplate() {
     document.title = getTitle();
-    document.getElementsByTagName('body')[0].innerHTML = FrameModule.body();
+    let body = FrameModule.body();
+    document.getElementsByTagName('body')[0].innerHTML = body;
     let footerHtml = FrameModule.footer(email);
     document.getElementById("dvFooter").innerHTML = footerHtml;
-    let headerHtml = FrameModule.header(links);
+    let headerHtml = FrameModule.header(links, isOff);
     document.getElementById("dvHeader").innerHTML = headerHtml;
     document.getElementById("spHeaderText").innerHTML = getHeader();
     if (typeof getContent !== 'undefined')
         document.getElementById("dvContainer").innerHTML = getContent();
-    let buttonId = `bt${btId}Page`;
-    document.getElementById(buttonId).classList.remove('link_off');
-    document.getElementById(buttonId).classList.add('link_on');
+    if (typeof (btId) !== 'undefined') {
+        let buttonId = `bt${btId}Page`;
+        document.getElementById(buttonId).classList.remove('link_off');
+        document.getElementById(buttonId).classList.add('link_on');
+    }
 }
