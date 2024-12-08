@@ -2,8 +2,8 @@ const url = "https://script.google.com/macros/s/AKfycby92iDh1N9QvciSgRVZmsk-ZmU4
 
 function getBlog() {
     
-    let getURL =  "https://script.google.com/macros/s/AKfycbyQndB7xAMH22QYwS-95lrO-i0ttbLnHD7O6b00CGSQlSi_IPZJDct8uS3mgAwN-Gsq?tab=blog";
-    return fetch(getURL, { method: 'GET' })
+    let url = "https://script.google.com/macros/s/AKfycbyQRexeP_tBYPZlwzQzFdRO6YQL3dZ6ygw5LDmJp4Emmqg4cU6fOxS0zgoDu5lJy1jR/exec?tab=blog"
+   return fetch(url, { method: 'GET' })
         .then(res => res.json())
         .then(res => {
             console.log(res);
@@ -13,7 +13,7 @@ function getBlog() {
 
 
 function getRemits() {
-    let url = "https://script.google.com/macros/s/AKfycbyQndB7xAMH22QYwS-95lrO-i0ttbLnHD7O6b00CGSQlSi_IPZJDct8uS3mgAwN-Gsq/exec?tab=remit"
+    let url = "https://script.google.com/macros/s/AKfycbyQRexeP_tBYPZlwzQzFdRO6YQL3dZ6ygw5LDmJp4Emmqg4cU6fOxS0zgoDu5lJy1jR/exec?tab=remit"
   
     return fetch(url, {
         method: 'GET',
