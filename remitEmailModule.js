@@ -1,4 +1,5 @@
-;const RemitEmailModule = {
+;//remitEmailModule.js
+const RemitEmailModule = {
 
     link(mrid, id) {
       return `https://bmrs.elexon.co.uk/remit/details/${mrid}?messageId=${id}`
