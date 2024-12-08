@@ -186,91 +186,6 @@ var BlogModule;
     }
     BlogModule.makeBlogCard = makeBlogCard;
 })(BlogModule || (BlogModule = {}));
-var FrameModule;
-(function (FrameModule) {
-    function footer(email) {
-        let html = ` <footer>
-    <div class="content-bottom w-100 d-flex align-items-center">
-      <div class="container">
-        <div class="d-flex flex-column flex-md-row justify-content-between">
-          <span class="d-flex align-items-center footer-references">Copyright<a href="https://www.synthase.co.uk" target="_blank">&nbsp;Synthase&nbsp;</a> Limited 2023. All rights reserved</span>
-          <div class="d-flex align-items-center footer-references">
-            <a href="mailto:${email}" class="me-2">${email}</a>
-            <a href="privacy.html" class="me-2">privacy</a>
-            <div id="cpSwitchBox">
-              <label class="switch">
-                <input id="swTheme" type="checkbox">
-                  <span class="slider round"></span>
-                </input>
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </footer>`;
-        return html;
-    }
-    FrameModule.footer = footer;
-    function header(links, isLinkSuffix) {
-        let linkSuffix = isLinkSuffix ? ".html" : "";
-        let buttons = links.map(o => {
-            return `<li class="nav-item"><a class="nav-link link_off" id="bt${o}Page" href="${o.toLowerCase() + linkSuffix}">${o}</a></li>`;
-        });
-        console.log(buttons);
-        let html = `<header>
-    <div class="content">
-      <nav class="navbar navbar-expand-md  navbar-light pt-1 pb-1">
-        <div class="container-fluid">
-          <img class="logo" src="logo.svg" />
-          <button class="navbar-toggler" type="button" data-bs-target="#collapsibleNavbar" data-bs-toggle="collapse">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="collapsibleNavbar">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-              ${buttons.join('')}
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </div>
-  </header>`;
-        return html;
-    }
-    FrameModule.header = header;
-    function body() {
-        let html = `
-    <div id="dvHeader"></div>
-    <div class="container">
-      <h2 class="myCss pt-2 pb-2">
-        <span id="spHeaderText" class="fw-light"></span></h2>
-    </div>
-    <div id="dvContainer" class="container">
-    </div>
-    <div id="dvFooter"></div>
-  `;
-        return html;
-    }
-    FrameModule.body = body;
-    function privacy(sitename) {
-        let html = `<div class="card mb-3" data-all="card" data-unique="" style="border-color:">
-    <div class="card-header" style="border-color:">Privacy Policy</div>
-    <div class="card-body">
-      <p class="card-text">No personal data is requested, retrieved or stored by this website.
-    </p>
-      <p class="card-text">
-    </p>
-      <p class="card-text">Google Analytics uses a set of cookies to collect information and report site usage statistics without personally identifying individual visitors to Google.</p>
-    </div>
-    <div class="card-footer text-muted d-flex flex-row justify-content-between align-items-center">
-      <span>${sitename}</span>
-    
-    </div>
-    </div>`;
-        return html;
-    }
-    FrameModule.privacy = privacy;
-})(FrameModule || (FrameModule = {}));
 function setTemplate() {
     document.title = getTitle();
     let body = FrameModule.body();
@@ -295,4 +210,89 @@ window.onload = function () {
     ThemeModule.initialisecpSwitchBox();
     if (typeof pageStartUp !== 'undefined')
         pageStartUp();
+};
+const FrameModule = {
+    footer: function (email) {
+        let html = ` <footer>
+    <div class="content-bottom w-100 d-flex align-items-center">
+      <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between">
+          <span class="d-flex align-items-center footer-references">Copyright<a href="https://www.synthase.co.uk" target="_blank">&nbsp;Synthase&nbsp;</a> Limited 2023. All rights reserved</span>
+          <div class="d-flex align-items-center footer-references">
+            <a href="mailto:${email}" class="me-2">${email}</a>
+            <a href="privacy.html" class="me-2">privacy</a>
+            <div id="cpSwitchBox">
+              <label class="switch">
+                <input id="swTheme" type="checkbox">
+                  <span class="slider round"></span>
+                </input>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>`;
+        return html;
+    },
+    header: function (links, isLinkSuffix) {
+        let linkSuffix = isLinkSuffix ? ".html" : "";
+        let buttons = links.map(o => {
+            return `<li class="nav-item"><a class="nav-link link_off" id="bt${o}Page" href="${o.toLowerCase() + linkSuffix}">${o}</a></li>`;
+        });
+        console.log(buttons);
+        let html = `<header>
+    <div class="content">
+      <nav class="navbar navbar-expand-md  navbar-light pt-1 pb-1">
+        <div class="container-fluid">
+          <img class="logo" src="logo.svg" />
+          <button class="navbar-toggler" type="button" data-bs-target="#collapsibleNavbar" data-bs-toggle="collapse">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              ${buttons.join('')}
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>`;
+        return html;
+    },
+    body: function () {
+        let html = `
+    <div id="dvHeader"></div>
+    <div class="container">
+      <h2 class="myCss pt-2 pb-2">
+        <span id="spHeaderText" class="fw-light"></span></h2>
+    </div>
+     <div id="dvSpinnerContainer" class="hiding2">
+    <section > <div id="dvSpinner" class="loader"></div></section>
+    
+    </div>
+    <div id="dvContainer" class="container">
+      
+    </div>
+    <div id="dvFooter"></div>
+  `;
+        return html;
+    },
+    privacy: function (sitename) {
+        let html = `<div class="card mb-3" data-all="card" data-unique="" style="border-color:">
+    <div class="card-header" style="border-color:">Privacy Policy</div>
+    <div class="card-body">
+      <p class="card-text">No personal data is requested, retrieved or stored by this website.
+    </p>
+      <p class="card-text">
+    </p>
+      <p class="card-text">Google Analytics uses a set of cookies to collect information and report site usage statistics without personally identifying individual visitors to Google.</p>
+    </div>
+    <div class="card-footer text-muted d-flex flex-row justify-content-between align-items-center">
+      <span>${sitename}</span>
+    
+    </div>
+    </div>`;
+        return html;
+    }
 };
