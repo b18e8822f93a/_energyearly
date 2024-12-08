@@ -80,9 +80,8 @@ table.T2  {
 .T2 th {
     -webkit-text-size-adjust: 100%;
     color: var(--tdColor);
-    font-feature-settings: "liga";
     line-height: 1.4ch;
-    font-family: "IBM Plex Mono", monospace;
+    font-family:  monospace;
     border-collapse: collapse;
     box-sizing: inherit;
     background: var(--thBackground);
@@ -399,6 +398,7 @@ input:checked + .slider:before {
 :root {
   --main-color: #2e3031;
   --main-bg-color: #6db3db;
+  --main-bg-color: #fbfdff;
 
   --second-colour : #e48583; 
   --second-bg-color: rgba(230, 224, 224, 0.918);

@@ -1,4 +1,4 @@
-;// catalogue.js
+
 function card(seriesIn) {
 
   var extraRows = Object.entries( seriesIn.outagesKvps).map(o => {
@@ -36,16 +36,6 @@ function card(seriesIn) {
   return card
 }
 
-function compareEntries(a, b) {
-  if (a.age < b.age) {
-    return -1;
-  }
-  if (a.age > b.age) {
-    return 1;
-  }
-  // a must be equal to b
-  return 0;
-}
 
 function getContentWithJson(jsonIn) {
 
@@ -57,12 +47,7 @@ function getContentWithJson(jsonIn) {
 
   return newHtml;
 }
-var groupBy = function (xs, key) {
-  return xs.reduce(function (rv, x) {
-    (rv[x[key]] = rv[x[key]] || []).push(x);
-    return rv;
-  }, {});
-};
+
 
 
 function getContentWithJsonTopOne(jsonIn) {

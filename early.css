@@ -1,0 +1,7 @@
+table.T2  {
+    table-layout: auto;
+    width: 100%;
+    border: 1px solid var(--tbBorder);
+    border-collapse: collapse;
+    background-color: var(--tbBackground);
+}
