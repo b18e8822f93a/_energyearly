@@ -2,7 +2,7 @@ const url = "https://script.google.com/macros/s/AKfycby92iDh1N9QvciSgRVZmsk-ZmU4
 
 function getBlog() {
     
-    let getURL =  url + "?tab=blog";
+    let getURL =  "https://script.google.com/macros/s/AKfycbyQndB7xAMH22QYwS-95lrO-i0ttbLnHD7O6b00CGSQlSi_IPZJDct8uS3mgAwN-Gsq?tab=blog";
     return fetch(getURL, { method: 'GET' })
         .then(res => res.json())
         .then(res => {
