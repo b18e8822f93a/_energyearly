@@ -32,6 +32,7 @@ const tablesModule = {
         return '<table class="T2">' + header + '<tbody>' + htmlRows.join('') + '</tbody></table>';
     },
 };
+;
 const datesModule = {
     dateOnlyString: function (o) {
         return o.toISOString().substring(0, 10);
@@ -287,3 +288,11 @@ function setTemplate() {
         document.getElementById(buttonId).classList.add('link_on');
     }
 }
+window.onload = function () {
+    ThemeModule.setTheme();
+    setTemplate();
+    onPageLoaded();
+    ThemeModule.initialisecpSwitchBox();
+    if (typeof pageStartUp !== 'undefined')
+        pageStartUp();
+};

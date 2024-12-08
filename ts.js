@@ -48,9 +48,7 @@ const radioButtonCreate = {
 
         return radioHtml + labelHtml;
     }
-}// declare var $: any;
-
-
+};//site.js declare var $: any;
 function setupRadioButtonFilterHandlerWithKeyLookup(buttonClass, cellClass, options) {
     //add event for the radio buttons, get the id, get the key, hide all, show with key
     $("." + buttonClass).click(function () {
@@ -172,7 +170,5 @@ function coupledButtonAndInput() {
             element.value = '';
 
         });
-
     }
-
 }
