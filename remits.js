@@ -1,7 +1,7 @@
 ;//outages.js
-const btId = 'Outages'
-const getHeader = () => 'Outages';
-const getTitle = () => 'EnergyEarly - Outages';
+const btId = 'Remits'
+const getHeader = () => 'UK Remits';
+const getTitle = () => 'EnergyEarly - Remits';
 
 function getContent() {
 

@@ -492,7 +492,8 @@ body {
 
 .other-bg-color {
   background-color: var(--third-bg-color);
-}.loader {
+}
+.loader {
     border: 12px solid #f3f3f3;
     border-top: 12px solid #3498db;
     border-radius: 50%;
