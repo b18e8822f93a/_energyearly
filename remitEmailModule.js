@@ -25,10 +25,10 @@ const RemitEmailModule = {
       return tb;
     },
     formatRow(o) {
-      console.log(o)
+      
       let outageType = o[10] === 'A54' ? "FORCED" : "SCHEDULED";
       let unitType = o[0] === ' A05' ? "PRODUCTION" : "GENERATION"
-      let tr = `<tr data-unique="${o[16].replaceAll(' ', '_').toLowerCase()}" data-all="card">
+      let tr = `<tr data-unique="${o[16].replaceAll(' ', '_').toLowerCase()},${o[4].replaceAll(' ', '_').toLowerCase()}" data-all="card">
         <td>
         <a href="${this.link(o[21], o[15])}" target="_blank">${o[15]}</a>
         </td>
@@ -44,7 +44,55 @@ const RemitEmailModule = {
         <td>${new Date(o[7]).toUTCString()}</td>
         </tr>`.split("\n").join('')
   
-      console.log(tr)
+    
       return tr;
+    },
+    formatLongTable(data) {
+      let tables = data.map(o => this.formatLongRow(o)).join('');
+   
+      return tables;
+    },
+    formatLongRow(o) {
+      
+      let outageType = o[10] === 'A54' ? "FORCED" : "SCHEDULED";
+      let unitType = o[0] === ' A05' ? "PRODUCTION" : "GENERATION";
+      let tr = `
+      <tr>
+      <th>ID</th>
+  
+      <td>
+        <a href="${this.link(o[21], o[15])}" target="_blank">${o[15]}</a>
+        </td>
+        <tr></tr>
+        <th>UNIT NAME</th>
+        <td>${o[4]}</td> </tr><tr>
+        <th>START</th>
+        <td>${o[1]}UTC</td></tr><tr>
+        <th>END</th>
+        <td>${o[2]}UTC</td></tr><tr>
+        <th>INSTALLED</th>
+        <td>${o[13]}</td></tr><tr>
+        <th>AVAILABLE</th>
+        <td>${o[12]}</td></tr><tr>
+        <th>UNAVAILABLE</th>
+        <td>${o[11]}</td></tr><tr>
+        <th>UNIT TYPE</th>
+        <td>${o[10]}</td></tr><tr>
+        <th>OUTAGE TYPE</th>
+        <td>${outageType}</td></tr><tr>
+        <th>FUEL TYPE</th>
+        <td>${o[16].toUpperCase()}</td></tr><tr>
+        <th>PUBLISHED</th>
+        <td>${new Date(o[7]).toUTCString()}</td></tr>`
+        .split("\n").join('')
+        ;
+  
+      let tb = `<table data-unique="${o[16].replaceAll(' ', '_').toLowerCase()},${o[4].replaceAll(' ', '_').toLowerCase()}" data-all="card" class="T2 T3">  
+     
+       <tbody>
+      ${tr} </tbody>
+      </table>`
+      .split("\n").join('');
+      return tb;
     }
   }
