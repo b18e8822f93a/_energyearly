@@ -17,46 +17,39 @@ function getContent() {
   return html;
 }
 
-
+function link(mrid, id) {
+  return `https://bmrs.elexon.co.uk/remit/details/${mrid}?messageId=${id}`
+}
 
 let jsonHold;
 
 let func = isLandscape => {
   console.log("here in func")
   document.getElementById('dvListings').innerHTML = getContentWithJson(jsonHold, isLandscape);
-  // setupRadioButtonFilterHandlerWithClassTableRowMultiple('rbIndustry', 'card');
   runTheFilter('card');
 };
 
-
 function onPageLoaded() {
   
-  getRemits()
+  getOutage()
     .then(res => {
       jsonHold = res;
-      fuels = ['ALL', ...new Set(res.map(o => o[16]).filter( x => x !== ""))]
-      fuels2 = ['ALL', ...new Set(res.map(o => o[4]).filter( x => x !== ""))]
+      fuels = ['ALL', ...new Set(res.map(o => o.fuelName).filter( x => x !== ""))]
+      fuels2 = ['ALL', ...new Set(res.map(o => o.unavailabilityType).filter( x => x !== ""))]
       console.log(fuels);
       var radioButtons = fuels.map((x, i) => radioButtonCreate.getAnRadioButtonLabelAsValue(i, x,   'rbIndustry', i === 0 ? 'checked' : '', 'btn-outline-success')).join('');
       var radioButtons2 = fuels2.map((x, i) => radioButtonCreate.getAnRadioButtonLabelAsValue(i, x, 'rbIndustry2', i === 0 ? 'checked' : '', 'btn-outline-success')).join('');
 
       document.getElementById('dvMenuButtons').innerHTML = radioButtons
-      //document.getElementById('dvMenuButtons2').innerHTML = radioButtons2
+      document.getElementById('dvMenuButtons2').innerHTML = radioButtons2
       document.getElementById('dvListings').innerHTML = getContentWithJson(res)
-      // setupRadioButtonFilterHandlerWithClassTableRow('rbIndustry', 'card');
-      // setupRadioButtonFilterHandlerWithClassTableRow('rbIndustry2', 'card');
       setupRadioButtonFilterHandlerWithClassTableRowMultiple('rbIndustry', 'card');
-      //setupRadioButtonFilterHandlerWithClassTableRowMultiple('rbIndustry2', 'card');
+      setupRadioButtonFilterHandlerWithClassTableRowMultiple('rbIndustry2', 'card');
 
       manageChangeInOrientation(func, '#dvHeader')
     })
-  
-   
-   
 }
 
 function getContentWithJson(jsonIn, isLandscape = false) {
-
-  let newHtml = RemitEmailModule.formatTable(jsonIn)
-  return isLandscape ? RemitEmailModule.formatTable(jsonIn) : RemitEmailModule.formatLongTable(jsonIn);
+  return isLandscape ? OutageView.responsive(link).formatTable(jsonIn) : OutageView.responsive(link).formatLongTable(jsonIn);
 }

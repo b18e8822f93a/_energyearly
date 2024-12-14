@@ -1,4 +1,150 @@
 ;
+function responsiveView(makeLink) {
+    function formatTable(data) {
+        let table = data.map(o => formatRow(o)).join('');
+        let tb = `<table class="T2 T3">  <thead>
+        <tr>
+        <th>ID</th>
+        <th>UNIT NAME</th>
+        <th>START</th>
+        <th>END</th>
+        <th>INSTALLED</th>
+        <th>AVAILABLE</th>
+        <th>UNAVAILABLE</th>
+        <th>EVENT TYPE</th>
+        <th>OUTAGE TYPE</th>
+        <th>FUEL TYPE</th>
+        <th>PUBLISHED</th>
+        </tr>
+         </thead>
+        ${table}</table>`.split("\n").join('');
+        return tb;
+    }
+    function formatRow(o) {
+        let tr = `<tr data-unique=",${o.fuelName.replaceAll(' ', '_').toLowerCase()},${o.unavailabilityType.replaceAll(' ', '_').toLowerCase()}" data-all="card">
+        <td>
+        <a href="${makeLink(o.mrid, o.id)}" target="_blank">${o.id}</a>
+        </td>
+        <td>${o.unit}</td>
+        <td>${o.startDate}UTC</td>
+        <td>${o.endDate}UTC</td>
+        <td>${o.capacity}</td>
+        <td>${o.available}</td>
+        <td>${o.unavailable}</td>
+        <td>${o.eventType}</td>
+        <td>${o.unavailabilityType}</td>
+        
+        <td>${o.fuelName.toUpperCase()}</td>
+        <td>${new Date(o.publishedDate).toUTCString()}</td>
+        </tr>`.split("\n").join('');
+        return tr;
+    }
+    function formatLongTable(data) {
+        let tables = data.map(o => formatLongRow(o)).join('');
+        return tables;
+    }
+    function formatLongRow(o) {
+        let tr = `
+      <tr>
+      <th>ID</th>
+  
+      <td>
+        <a href="${makeLink(o.mrid, o.id)}" target="_blank">${o.id}</a>
+        </td>
+        <tr></tr>
+        <th>UNIT NAME</th>
+        <td>${o.unit}</td> </tr><tr>
+        <th>START</th>
+        <td>${o.startDate}UTC</td></tr><tr>
+        <th>END</th>
+        <td>${o.endDate}UTC</td></tr><tr>
+        <th>INSTALLED</th>
+        <td>${o.capacity}</td></tr><tr>
+        <th>AVAILABLE</th>
+        <td>${o.available}</td></tr><tr>
+        <th>UNAVAILABLE</th>
+        <td>${o.unavailable}</td></tr><tr>
+        <th>EVENT TYPE</th>
+        <td>${o.eventType}</td></tr><tr>
+        <th>OUTAGE TYPE</th>
+        <td>${o.unavailabilityType}</td></tr><tr>
+        <th>FUEL TYPE</th>
+        <td>${o.fuelName}</td></tr><tr>
+        <th>EVENT STATUS</th>
+        <td>${o.eventStatus}</td></tr><tr>
+        <th>mRID</th>
+        <td>${o.mrid}</td></tr><tr>
+        <th>PUBLISHED</th>
+        <td>${new Date(o.publishedDate).toUTCString()}</td></tr>`
+            .split("\n").join('');
+        let tb = `<table data-unique=",${o.fuelName.replaceAll(' ', '_').toLowerCase()},${o.unavailabilityType.replaceAll(' ', '_').toLowerCase()}" data-all="card" class="T2 T3">  
+     
+       <tbody>
+      ${tr} </tbody>
+      </table>`
+            .split("\n").join('');
+        return tb;
+    }
+    return { formatLongTable, formatTable };
+}
+;
+function OutageView() { }
+OutageView.makeTable =
+    function (items) {
+        if (items.length === 0)
+            return '';
+        let tb0 = '<table class="T2" border=3><thead><th>Fuel</th><th>Plant</th><th>Unit</th><th>Capacity (MW)</th><th>Unavailable (MW)</th><th>Available (MW)</th><th>Percent</th><th>Duration</th><th>Start</th><th>End</th><th>Published</th></thead><tbody>';
+        items.forEach(element => {
+            tb0 += '<tr>';
+            tb0 += '<td style="background-color:' + element.colour + 'a9">';
+            tb0 += element.fuelName;
+            tb0 += '</td>';
+            tb0 += '<td>';
+            tb0 += element.plant;
+            tb0 += '</td>';
+            tb0 += '<td>';
+            tb0 += element.unit;
+            tb0 += '</td>';
+            tb0 += '<td>';
+            tb0 += element.capacity;
+            tb0 += '</td>';
+            tb0 += '<td class ="searchText">';
+            tb0 += element.unavailable;
+            tb0 += '</td>';
+            tb0 += '<td>';
+            tb0 += element.available;
+            tb0 += '</td>';
+            tb0 += '<td>';
+            tb0 += element.fraction;
+            tb0 += '</td>';
+            tb0 += '<td>';
+            tb0 += element.duration;
+            tb0 += '</td>';
+            tb0 += '<td>';
+            tb0 += element.startDate.replace('T', ' ');
+            tb0 += '</td>';
+            tb0 += '<td>';
+            tb0 += element.endDate.replace('T', ' ');
+            tb0 += '</td>';
+            tb0 += '<td>';
+            tb0 += element.publishedDate.replace('T', ' ');
+            tb0 += '</td>';
+            tb0 += '</tr>';
+        });
+        tb0 += '</tbody>';
+        return tb0;
+    };
+if (typeof cardView !== 'undefined')
+    OutageView.card = cardView;
+if (typeof inlineCardBView !== 'undefined')
+    OutageView.inlineCardB = inlineCardBView;
+if (typeof inlineCardAView !== 'undefined')
+    OutageView.inlineCardA = inlineCardAView();
+if (typeof emailView !== 'undefined')
+    OutageView.makeEmail = emailView();
+if (typeof responsiveView !== 'undefined')
+    OutageView.responsive = responsiveView;
+;
 function setupRadioButtonFilterHandlerWithKeyLookup(buttonClass, cellClass, options) {
     $("." + buttonClass).click(function () {
         var theValue = $(this).val();
@@ -19,8 +165,8 @@ function runTheFilter(cellClass) {
         $("table[data-all=" + cellClass + "]").hide();
         $("tr[data-all=" + cellClass + "]").hide();
     }
-    let testing = removedAll.reduce((previousValue, currentValue) => previousValue.filter("[data-unique*='" + currentValue + "']"), $("tr[data-all=" + cellClass + "]"));
-    let testing2 = removedAll.reduce((previousValue, currentValue) => previousValue.filter("[data-unique*='" + currentValue + "']"), $("table[data-all=" + cellClass + "]"));
+    let testing = removedAll.reduce((previousValue, currentValue) => previousValue.filter("[data-unique*='," + currentValue + "']"), $("tr[data-all=" + cellClass + "]"));
+    let testing2 = removedAll.reduce((previousValue, currentValue) => previousValue.filter("[data-unique*='," + currentValue + "']"), $("table[data-all=" + cellClass + "]"));
     testing.show();
     testing2.show();
 }
@@ -110,22 +256,22 @@ function coupledButtonAndInput() {
         });
     }
 }
-function manageChangeInOrientation(func, elementToObserve, toWatch = '(orientation: landscape)') {
+function manageChangeInOrientation(func, elementToObserve, toWatch = '(max-width: 1200px)') {
     function setIsLandscape() {
         const mediaQuery = window.matchMedia(toWatch);
         if (mediaQuery.matches) {
-            console.log("landscape");
-            if (isLandscape)
-                return false;
-            else
-                isLandscape = true;
-        }
-        else {
             console.log("portrait");
             if (!isLandscape)
                 return false;
             else
                 isLandscape = false;
+        }
+        else {
+            console.log("landscape");
+            if (isLandscape)
+                return false;
+            else
+                isLandscape = true;
         }
         return true;
     }
