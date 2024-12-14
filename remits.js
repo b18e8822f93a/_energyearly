@@ -31,7 +31,7 @@ let func = isLandscape => {
 
 function onPageLoaded() {
   
-  getOutage()
+  getRemits()
     .then(res => {
       jsonHold = res;
       fuels = ['ALL', ...new Set(res.map(o => o.fuelName).filter( x => x !== ""))]
