@@ -1,3 +1,23 @@
+var countryColors = new Map([
+    ["SY", "#8B4513"],
+    ["UK", "#0000ff"],
+]);
+var fuelColors = new Map([
+    ["Biomass", "#8B4513"],
+    ["Fossil Brown coal/Lignite", "#A52A2A"],
+    ["Fossil Gas", "#4682B4"],
+    ["Fossil Hard coal", "#000000"],
+    ["Fossil Oil", "#FF6347"],
+    ["Hydro Pumped Storage", "#00FF00"],
+    ["Hydro Water Reservoir", "#1E90FF"],
+    ["Nuclear", "#FF00FF"],
+    ["Other", "#D2691E"],
+    ["Other renewable", "#ADFF2F"],
+    ["Wind Offshore", "#00BFFF"],
+    ["Wind Offshore", "#0eBFFF"],
+    ["Gas", "#7FFF00"],
+    ["Coal", "#7FFF00"]
+]);
 ;
 function responsiveView(makeLink) {
     function formatTable(data) {
@@ -307,14 +327,14 @@ const radioButtonCreate = {
         if (typeof isChecked !== 'undefined')
             checked = isChecked ? "checked" : "";
         var radioHtml = `<input class='btn-check ${name}' type='radio' id='${name}${id}' value='${label}' name='${name}' ${checked}/>`;
-        var labelHtml = `<label class='btn ${className} '  for='${name}${id}'>${label}</label>`;
+        var labelHtml = `<label class='btn ${className}'  for='${name}${id}'>${label}</label>`;
         return radioHtml + labelHtml;
     },
     getAnRadioButtonColour: function getAnRadioButton(id, label, name, isChecked, colour, className = 'btn-outline-primary') {
         let checked = id === 0 ? "checked" : "";
         if (typeof isChecked !== 'undefined')
             checked = isChecked ? "checked" : "";
-        var radioHtml = `<input class='btn-check ' type='radio' id='${name}${id}' value='${id}' name='${name}' ${checked}/>`;
+        var radioHtml = `<input class='btn-check ${name}' type='radio' id='${name}${id}' value='${label}' name='${name}' ${checked}/>`;
         var labelHtml = `<label style="--xy:${colour}" class='btn ${className} mb-1'  for='${name}${id}'>${label}</label>`;
         return radioHtml + labelHtml;
     },
@@ -323,13 +343,13 @@ const radioButtonCreate = {
         if (typeof isChecked !== 'undefined')
             checked = isChecked ? "checked" : "";
         var radioHtml = `<input class='btn-check ' type='radio' id='${name}${id}' value='${id}' name='${name}' ${checked}/>`;
-        var labelHtml = `<label class='btn ${className} '  for='${name}${id}'>${label}</label>`;
+        var labelHtml = `<label class='btn ${className}'  for='${name}${id}'>${label}</label>`;
         return radioHtml + labelHtml;
     },
     getAnCheckButton: function (id, label, name, className = 'btn-outline-primary') {
         let checked = id === 0 ? "checked" : "";
         var radioHtml = `<input class='btn-check' type='checkbox' id='${name}${id}' value='${id}' name='${name}' ${checked}/>`;
-        var labelHtml = `<label class='btn ${className} '  for='${name}${id}'>${label}</label>`;
+        var labelHtml = `<label class='btn ${className}'  for='${name}${id}'>${label}</label>`;
         return radioHtml + labelHtml;
     }
 };

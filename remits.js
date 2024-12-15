@@ -36,9 +36,16 @@ function onPageLoaded() {
       jsonHold = res;
       fuels = ['ALL', ...new Set(res.map(o => o.fuelName).filter( x => x !== ""))]
       fuels2 = ['ALL', ...new Set(res.map(o => o.unavailabilityType).filter( x => x !== ""))]
+
+      
+      const subsetLabelColors = new Map(
+        [...fuelColors].filter(([label, color]) => fuels.includes(label))
+      );
+      console.log(subsetLabelColors);
       console.log(fuels);
-      var radioButtons = fuels.map((x, i) => radioButtonCreate.getAnRadioButtonLabelAsValue(i, x,   'rbIndustry', i === 0 ? 'checked' : '', 'btn-outline-success')).join('');
-      var radioButtons2 = fuels2.map((x, i) => radioButtonCreate.getAnRadioButtonLabelAsValue(i, x, 'rbIndustry2', i === 0 ? 'checked' : '', 'btn-outline-success')).join('');
+      let radioButtons = [['All', 'Blue'], ...subsetLabelColors].map((x, i) => radioButtonCreate.getAnRadioButtonColour(i, x[0], 'rbIndustry', i === 0 ? 'checked' : '', x[1])).join('');
+
+      let radioButtons2 = fuels2.map((x, i) => radioButtonCreate.getAnRadioButtonLabelAsValue(i, x, 'rbIndustry2', i === 0 ? 'checked' : '', 'btn-outline-success')).join('');
 
       document.getElementById('dvMenuButtons').innerHTML = radioButtons
       document.getElementById('dvMenuButtons2').innerHTML = radioButtons2
