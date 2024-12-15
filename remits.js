@@ -1,15 +1,15 @@
 ;//outages.js
 const btId = 'Remits'
-const getHeader = () => 'UK Remits';
+const getHeader = () => 'UK Remits - Today Only';
 const getTitle = () => 'EnergyEarly - Remits';
 
 function getContent() {
 
   let html = `
     <div class="container p-1 mt-1 mb-2">
-        <div id="dvMenuButtons" class="btn-group btn-group-lg btn-group-justified w-100" role="group">
+        <div id="dvMenuButtons" class="btn-group btn-group-sm btn-group-justified w-100" role="group">
         </div>
-         <div id="dvMenuButtons2" class="btn-group btn-group-lg btn-group-justified w-100" role="group">
+         <div id="dvMenuButtons2" class="btn-group btn-group-sm btn-group-justified w-100" role="group">
         </div>
       </div>
     <div id="dvListings"></div>`

@@ -1,7 +1,7 @@
 ;// catalogue.js
 function card(seriesIn) {
-  var card = ` <div class="card mb-3" data-all="card" data-unique="${seriesIn.fuel.toLowerCase()}" style="border-color:#ee12cd">
-            <div class="card-header d-flex flex-row justify-content-between align-items-center" style="border-color:#ee12cd">${seriesIn.title}<div class="mb-auto"><a class="btn btn-outline-secondary searchText" href="${seriesIn.link}" target="_blank" role="button">Visit Source</a></div></div>
+  var card = ` <div class="card mb-3" data-all="card" data-unique="${seriesIn.fuel.toLowerCase()}" style="border-color:${seriesIn.tag1Colour}">
+            <div class="card-header d-flex flex-row justify-content-between align-items-center" style="border-color:${seriesIn.tag1Colour}">${seriesIn.title}<div class="mb-auto"><a class="btn btn-outline-secondary searchText" href="${seriesIn.link}" target="_blank" role="button">Visit Source</a></div></div>
             <ul class="list-group list-group-flush">
             <li class="list-group-item">
                 <span class="searchText">${seriesIn.plant}</span>
@@ -19,8 +19,8 @@ function card(seriesIn) {
             <div class="card-footer text-muted d-flex flex-row  align-items-center">
               <span style="margin-right:auto">${seriesIn.timestamp} (${seriesIn.age} days)</span>
              
-              <span class="tagSpan" style="background-color:#ee12cd; margin-left:3px">${seriesIn.fuel}</span>
-              <span class="tagSpan" style="background-color:#5b73a3; margin-left:3px">${seriesIn.country}</span>
+              <span class="tagSpan" style="background-color:${seriesIn.tag1Colour}; margin-left:3px">${seriesIn.fuel}</span>
+              <span class="tagSpan" style="background-color:${seriesIn.tag2Colour}; margin-left:3px">${seriesIn.country}</span>
             </div>
           </div>`;
 
@@ -41,7 +41,7 @@ function compareEntries(a, b) {
 
 function getContentWithJson(jsonIn) {
 
-  let json2 = jsonIn.map(o => { return { content: o.content, timestamp: datesModule.stringToDate(o.timestamp), age: datesModule.differenceFromNow(o.timestamp), ...o.author } });
+  let json2 = jsonIn.map(o => { return { content: o.content, timestamp: datesModule.stringToDate(o.timestamp), age: datesModule.differenceFromNow(o.timestamp), ...o.author, tag1Colour : outageTagColours[o.author.fuel.toLowerCase()], tag2Colour : countryTagColours[o.author.country.toLowerCase()] } });
   json2.sort(compareEntries);
   console.log(json2)
   let cards = json2.map(x => card(x));

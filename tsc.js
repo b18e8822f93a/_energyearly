@@ -1,3 +1,14 @@
+function percentageToHsl(percentage, hue0, hue1) {
+    var hue = (percentage * (hue1 - hue0)) + hue0;
+    return 'hsl(' + hue + ', 100%, 50%)';
+}
+function percentageToWhite(percentage, hue0) {
+    var L = 100 - (percentage * 50);
+    return 'hsl(' + hue0 + ', 100%, ' + L + '%)';
+}
+function percentageToWhiteNegativeToo(numerator, dominator, hue0, hue1) {
+    return numerator > 0 ? percentageToWhite(numerator / dominator, hue0) : percentageToWhite(Math.abs(numerator) / dominator, hue1);
+}
 var countryColors = new Map([
     ["SY", "#8B4513"],
     ["UK", "#0000ff"],
@@ -18,6 +29,14 @@ var fuelColors = new Map([
     ["Gas", "#7FFF00"],
     ["Coal", "#7FFF00"]
 ]);
+var outageTagColours = {
+    'power': 'black',
+    'gas': "#7FFF00",
+};
+let countryTagColours = {
+    'spain': 'red',
+    'norway': 'purple',
+};
 ;
 function responsiveView(makeLink) {
     function formatTable(data) {
@@ -26,36 +45,39 @@ function responsiveView(makeLink) {
         <tr>
         <th>ID</th>
         <th>UNIT NAME</th>
-        <th>START</th>
-        <th>END</th>
+        <th>START(UTC)</th>
+        <th>END(UTC)</th>
         <th>INSTALLED</th>
         <th>AVAILABLE</th>
         <th>UNAVAILABLE</th>
         <th>EVENT TYPE</th>
         <th>OUTAGE TYPE</th>
         <th>FUEL TYPE</th>
-        <th>PUBLISHED</th>
+        <th>PUBLISHED(UTC)</th>
         </tr>
          </thead>
         ${table}</table>`.split("\n").join('');
         return tb;
     }
     function formatRow(o) {
+        let countryColour = countryColors.get(o.country);
+        let fuelColour = fuelColors.get(o.fuelName);
+        let percentageColour = percentageToWhite(((o.fraction) / 100), 0);
         let tr = `<tr data-unique=",${o.fuelName.replaceAll(' ', '_').toLowerCase()},${o.unavailabilityType.replaceAll(' ', '_').toLowerCase()}" data-all="card">
         <td>
         <a href="${makeLink(o.mrid, o.id)}" target="_blank">${o.id}</a>
         </td>
         <td>${o.unit}</td>
-        <td>${o.startDate}UTC</td>
-        <td>${o.endDate}UTC</td>
+        <td>${o.startDate.replace('T', ' ').replace('Z', ' ')}</td>
+        <td>${o.endDate.replace('T', ' ').replace('Z', ' ')}</td>
         <td>${o.capacity}</td>
         <td>${o.available}</td>
-        <td>${o.unavailable}</td>
+        <td style="background-color: ${percentageColour}" >${o.unavailable}</td>
         <td>${o.eventType}</td>
         <td>${o.unavailabilityType}</td>
         
-        <td>${o.fuelName.toUpperCase()}</td>
-        <td>${new Date(o.publishedDate).toUTCString()}</td>
+        <td style="background-color: ${fuelColour}">${o.fuelName.toUpperCase()}</td>
+        <td>${new Date(o.publishedDate).toISOString().replace('T', ' ').replace('Z', ' ').slice(0, -5)}</td>
         </tr>`.split("\n").join('');
         return tr;
     }
@@ -64,6 +86,9 @@ function responsiveView(makeLink) {
         return tables;
     }
     function formatLongRow(o) {
+        let countryColour = countryColors.get(o.country);
+        let fuelColour = fuelColors.get(o.fuelName);
+        let percentageColour = percentageToWhite(((o.fraction) / 100), 0);
         let tr = `
       <tr>
       <th>ID</th>
@@ -83,13 +108,15 @@ function responsiveView(makeLink) {
         <th>AVAILABLE</th>
         <td>${o.available}</td></tr><tr>
         <th>UNAVAILABLE</th>
-        <td>${o.unavailable}</td></tr><tr>
+        <td >${o.unavailable}</td></tr><tr>
+        <th>FRACTION</th>
+        <td style="background-color: ${percentageColour}" >${o.fraction}</td></tr><tr>
         <th>EVENT TYPE</th>
         <td>${o.eventType}</td></tr><tr>
         <th>OUTAGE TYPE</th>
         <td>${o.unavailabilityType}</td></tr><tr>
         <th>FUEL TYPE</th>
-        <td>${o.fuelName}</td></tr><tr>
+        <td style="background-color: ${fuelColour}">${o.fuelName}</td></tr><tr>
         <th>EVENT STATUS</th>
         <td>${o.eventStatus}</td></tr><tr>
         <th>mRID</th>
@@ -97,7 +124,7 @@ function responsiveView(makeLink) {
         <th>PUBLISHED</th>
         <td>${new Date(o.publishedDate).toUTCString()}</td></tr>`
             .split("\n").join('');
-        let tb = `<table data-unique=",${o.fuelName.replaceAll(' ', '_').toLowerCase()},${o.unavailabilityType.replaceAll(' ', '_').toLowerCase()}" data-all="card" class="T2 T3">  
+        let tb = `<table style="border-color : ${fuelColour}" data-unique=",${o.fuelName.replaceAll(' ', '_').toLowerCase()},${o.unavailabilityType.replaceAll(' ', '_').toLowerCase()}" data-all="card" class="T2 T3">  
      
        <tbody>
       ${tr} </tbody>
@@ -520,21 +547,21 @@ var ThemeModule;
 })(ThemeModule || (ThemeModule = {}));
 var BlogModule;
 (function (BlogModule) {
-    function makeBlogCardFromType(blogEntry) {
-        return makeBlogCard(blogEntry.title, blogEntry.txt, blogEntry.date, blogEntry.tag1, blogEntry.tag2);
+    function makeBlogCardFromType(blogEntry, tag1ColourMap, tag2ColourMap) {
+        return makeBlogCard(blogEntry.title, blogEntry.txt, blogEntry.date, blogEntry.tag1, blogEntry.tag2, tag1ColourMap[blogEntry.tag1.toLowerCase()], tag2ColourMap[blogEntry.tag2.toLowerCase()]);
     }
     BlogModule.makeBlogCardFromType = makeBlogCardFromType;
-    function makeBlogCard(title, txt, date, tag1, tag2) {
-        let html = `<div class="card mb-3" data-all="card" data-unique="job" style="border-color:#ee12cd">
-    <div class="card-header d-flex flex-row justify-content-between align-items-center" style="border-color:#ee12cd">${title}
+    function makeBlogCard(title, txt, date, tag1, tag2, tag1Colour, tag2Colour) {
+        let html = `<div class="card mb-3" data-all="card" data-unique="job" style="border-color:${tag2Colour}">
+    <div class="card-header d-flex flex-row justify-content-between align-items-center" style="border-color:${tag2Colour}">${title}
     <div class="mb-auto"></div></div>
     <div class="card-body">
       <p class="card-text">${txt}</p>
     </div>
     <div class="card-footer text-muted d-flex flex-row  align-items-center">
       <span style="margin-right:auto">${date}</span>
-      <span class="tagSpan" style="background-color:#ee12cd; margin-left:3px">${tag2}</span>
-      <span class="tagSpan" style="background-color:#6666ff; margin-left:3px">${tag1}</span>
+      <span class="tagSpan" style="background-color:${tag1Colour}; margin-left:3px">${tag1}</span>
+      <span class="tagSpan" style="background-color:${tag2Colour}; margin-left:3px">${tag2}</span>
     </div>
     </div>`;
         return html;
@@ -619,8 +646,9 @@ const FrameModule = {
         let html = `
     <div id="dvHeader"></div>
     <div class="container">
-      <h2 class="myCss pt-2 pb-2">
-        <span id="spHeaderText" class="fw-light"></span></h2>
+      <h1 class="myCss pt-2 pb-2">
+        <span id="spHeaderText" class="fw-light"></span>
+      </h1>
     </div>
      <div id="dvSpinnerContainer" class="hiding2">
     <section > <div id="dvSpinner" class="loader"></div></section>

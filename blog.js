@@ -5,7 +5,7 @@ const getTitle = () => 'EnergyEarly - Blog';
 
 function getDynamicContent(blogEntries) {
   console.log(blogEntries)
-  var cards = blogEntries.reverse().map(o => BlogModule.makeBlogCardFromType(o));
+  var cards = blogEntries.reverse().map(o => BlogModule.makeBlogCardFromType(o, countryTagColours, outageTagColours));
   return cards;
 }
 
