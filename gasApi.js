@@ -1,6 +1,7 @@
-const url = "https://script.google.com/macros/s/AKfycby92iDh1N9QvciSgRVZmsk-ZmU4OYCSJ8MO9DYX0nsB3C8p49SIUd9KnIzVV0p6p6Nh/exec";
+const apiUrl = "https://script.google.com/macros/s/AKfycbxiKLEB_xdYuhE6yD5BYQ9o-T8i5mtERx3EJw_WKgmrun5-EykoNi9EWw2SlmdwCefc/exec?tab=";
 
 function getJson(url) {
+    
     $('#dvSpinnerContainer').toggleClass("hiding2", false);
     $('#dvContainer').toggleClass("hiding2", true);
 
@@ -13,59 +14,44 @@ function getJson(url) {
         return res;
     })
 }
+
 function getBlog() {
     
-    let url = "https://script.google.com/macros/s/AKfycbyQRexeP_tBYPZlwzQzFdRO6YQL3dZ6ygw5LDmJp4Emmqg4cU6fOxS0zgoDu5lJy1jR/exec?tab=blog"
+    let url = apiUrl + "blog"
     return getJson(url);
 }
-
 
 function getRemits() {
-    let url = "https://script.google.com/macros/s/AKfycbyQRexeP_tBYPZlwzQzFdRO6YQL3dZ6ygw5LDmJp4Emmqg4cU6fOxS0zgoDu5lJy1jR/exec?tab=remit"
+
+    let url = apiUrl + "remit"
     return getJson(url);
 }
-
 
 function getHistory() {
 
-    let url = "https://script.google.com/macros/s/AKfycbwLTvXgkM9GU09lw1Uctk39GuyWNothwGQS-OcdxnHQuEEGd_ocXH6L_-HyBH6MLMMj/exec?tab=history"
-
+    let url = apiUrl + "history"
     return getJson(url);
 }
 
 function getLatest() {
 
-    let url = "https://script.google.com/macros/s/AKfycbwLTvXgkM9GU09lw1Uctk39GuyWNothwGQS-OcdxnHQuEEGd_ocXH6L_-HyBH6MLMMj/exec?tab=history"
-  
-    return fetch(url, {
-        method: 'GET',
-    })
-        .then(res => res.json())
-        .then(res => {
-            console.log(res);
-            return res;
-        })
-        ;
+    let url = apiUrl + "history"
+    return getJson(url);
 }
 
 function getSources() {
-    let url = "https://script.google.com/macros/s/AKfycbxEEgvMb0TQUk3bqp-DAnXRgkYAKmvjF0A6HvHJRFQsyweBbJbn0EPuhdMqxJMRhpJU/exec?tab=feeds"
+    let url = apiUrl + "feeds"
 
     return fetch(url, {
       method: 'GET',
      
     })
-      .then(res => res.json())
+    .then(res => res.json())
 }
 
 
 function getOutages() {
-    let url = "https://script.google.com/macros/s/AKfycbxrECqIzoMP7bfTGUBIFLaKuOXszs4pNJXqugmxIyYh-yR9z14-TtRBbqb2_Y_VVdFB/exec"
 
-    return fetch(url, {
-      method: 'GET',
-     
-    })
-      .then(res => res.json())
-     // .then(res => addContentToPage(res));
+    let url = apiUrl + "outages";
+    return getJson(url);
 }
