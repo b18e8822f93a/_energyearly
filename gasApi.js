@@ -52,7 +52,7 @@ function getSources() {
 
 function getOutages() {
 
-    let url = "https://script.google.com/macros/s/AKfycbxM3EymMGdKOYK-TmDK4DykxSvWwfXPNeFt6TDThGsj7owi7QyFO_sV2TrxKDgUOas_/exec?tab=x" ;    
+    let url = "https://script.google.com/macros/s/AKfycbwYlb25MOkKEnxOLmRSmwlL-mnRmIgnPioxVpP4MtFEqfEXUmHAiF5T9EPqMMae_7lR/exec?tab=outages" ;    
     return fetch(url, {
         method: 'GET',
        
