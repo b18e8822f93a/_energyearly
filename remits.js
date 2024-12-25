@@ -7,7 +7,7 @@ function getContent() {
 
   let html = `
     <div class="container p-1 mt-1 mb-2">
-        <div id="dvMenuButtons" class="btn-group btn-group-sm btn-group-justified w-100" role="group">
+        <div id="dvMenuButtons" class="btn-group btn-group-sm btn-group-justified w-100 d-flex flex-md-row flex-column w-100 p-1 " role="group">
         </div>
          <div id="dvMenuButtons2" class="btn-group btn-group-sm btn-group-justified w-100" role="group">
         </div>

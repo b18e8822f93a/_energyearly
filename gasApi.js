@@ -52,6 +52,10 @@ function getSources() {
 
 function getOutages() {
 
-    let url = apiUrl + "outages";
-    return getJson(url);
-}
+    let url = "https://script.google.com/macros/s/AKfycbxM3EymMGdKOYK-TmDK4DykxSvWwfXPNeFt6TDThGsj7owi7QyFO_sV2TrxKDgUOas_/exec?tab=x" ;    
+    return fetch(url, {
+        method: 'GET',
+       
+      })
+      .then(res => res.json())
+  } 
