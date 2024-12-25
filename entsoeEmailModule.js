@@ -25,7 +25,7 @@
     formatRow(o) {
       let outageType = o[10] === 'A54' ? "FORCED" : "SCHEDULED";
       let unitType = o[0] === ' A05' ? "PRODUCTION" : "GENERATION"
-      let tr = `<tr data-unique="${o[13].replaceAll(' ', '_').toLowerCase()}" data-all="card">
+      let tr = `<tr data-unique="${o[14].replaceAll(' ', '_').toLowerCase()}" data-all="card">
         <td>
         <a href="${this.link(o[11])}" target="_blank">${o[11]}</a>
         </td>
@@ -36,7 +36,7 @@
         <td>${o[7]}</td>
         <td>${unitType}</td>
         <td>${outageType}</td>
-        <td>${o[13].toUpperCase()}</td>
+        <td>${o[14].toUpperCase()}</td>
        
         <td>${new Date(o[12]).toUTCString()}</td>
         </tr>`.split("\n").join('')
