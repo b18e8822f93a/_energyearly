@@ -19,7 +19,7 @@ function onPageLoaded() {
   getOutages()
     .then(res => {
 
-      fuels = ['ALL', ...new Set(res.map(o => o[14]))]
+      fuels = ['ALL', ...new Set(res.map(o => o[13]))]
       var radioButtons = fuels.map((x, i) => radioButtonCreate.getAnRadioButtonLabelAsValue(i, x, 'rbIndustry', i === 0 ? 'checked' : '', 'btn-outline-success')).join('');
 
       document.getElementById('dvMenuButtons').innerHTML = radioButtons
