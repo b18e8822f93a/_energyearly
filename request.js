@@ -30,42 +30,35 @@ function getContent() {
     return html;
 }
 
+function feedbackUi(res) {
+
+    const thanksBox = document.getElementById("dvFeedback");
+
+    let isSuccessful = res.okay;
+    if (isSuccessful == 0) {
+        thanksBox.innerHTML = "Sorry your request could not be completed at this time.";
+        thanksBox.classList.add('alert')
+        thanksBox.classList.add('alert-secondary')
+        document.getElementById('fm1').classList.add('was-validated')
+    }
+    else if (isSuccessful == 1) {
+        thanksBox.innerHTML = "You have successfully submitted a data source for consideration. Thank you.";
+        thanksBox.classList.add('alert')
+        thanksBox.classList.add('alert-primary')
+        document.getElementById('fm1').classList.add('was-validated')
+    }
+}
 function rssUrlSubmission2() {
 
     let url = document.getElementById('formGroupExampleInput1').value;
     let description = document.getElementById('formGroupExampleInput2').value;
-    var thanksBox = document.getElementById("dvFeedback");
 
     console.log(url);
     console.log(description);
     event.preventDefault()
     event.stopPropagation()
 
-    let packet = { key: 'request', data: [{ link: url, description: description }] }
-    let getURL = "https://script.google.com/macros/s/AKfycbxWZSVT7EZxBtavefN_pm4g76Rb9zuASowH-jFp87c7tP1QHGkRXrcl49aNPAzDRgtu/exec";
-
-    fetch(getURL, {
-        method: 'POST',
-        body: JSON.stringify(packet)
-    })
-        .then(res => res.json())
-        .then(res => {
-            console.log(res);
-
-            let isSuccessful = res.okay;
-            if (isSuccessful == 0) {
-                thanksBox.innerHTML = "Sorry your request could not be completed at this time.";
-                thanksBox.classList.add('alert')
-                thanksBox.classList.add('alert-secondary')
-                document.getElementById('fm1').classList.add('was-validated')
-            }
-            else if (isSuccessful == 1) {
-                thanksBox.innerHTML = "You have successfully submitted a data source for consideration. Thank you.";
-                thanksBox.classList.add('alert')
-                thanksBox.classList.add('alert-primary')
-                document.getElementById('fm1').classList.add('was-validated')
-            }
-        });
+    postASuggestion(url, description);
 }
 
 function onPageLoaded() {

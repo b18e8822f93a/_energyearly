@@ -1,19 +1,22 @@
 const btId = 'Subscribe'
-const getHeader = () => 'Subscribe'
+const getHeader = () => 'Subscribe to Email Alerts'
 const getTitle = () => 'EnergyEarly - Subscribe';
 function getContent() {
-  let html = `<div class="flexContainer">
-<div id='dv1'></div>
-</div>
-<div class="flexContainer2">
-<div></div>
+  let html = `
+  <div class="flexContainer">
+    <div id='dv1'></div>
+  </div>
+  <div class="flexContainer2">
+    <div>
+      <br/><br/>
+    </div>
 
 <div style="  padding-left: 1rem; padding-right: 1rem;">
   <form id='fm1' style="flex-grow: 4;" class="form-group" onsubmit="rssUrlSubmission()">
     <fieldset>
       <legend>Please select from the above data sources and submit your email address to subscribe to email alerts</legend>
       <div class=" mb-3">
-        <small id="emailHelp" class="form-text text-muted">We'll never share your this email with anyone else. When you deselect all options we will delete your email address from our
+        <small id="emailHelp" class="form-text text-muted">We'll never share your this email with anyone else. When you deselect all options and submit we will delete your email address from our
           records.</small>
       </div>
       <div class="mb-3">
@@ -21,6 +24,7 @@ function getContent() {
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
     </fieldset>
+    <br/>
     <div id='dvFeedback'></div>
   </form>
 </div>
@@ -30,23 +34,10 @@ function getContent() {
   return html;
 }
 
-function post(email, ids) {
 
-  let packet = { key: 'subscribe', data: [{ email: email, ids: ids }] };
-  let url = "https://script.google.com/macros/s/AKfycby9dqCK8nYtIC9Vfb63yAxp-Rq5PuEcp0U4NtueypnWuteWjqskclSb2TK0CMC1S5Rz/exec"
-
-  console.log(packet);
-  fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(packet)
-  })
-    .then(res => res.json())
-    .then(res => feedbackUi(res));
-}
 
 function feedbackUi(res) {
 
-  console.log(res, 'here boy cat');
   var thanksBox = document.getElementById("dvFeedback");
   let isSuccessful = res.okay;
   let code = res.code;
@@ -59,13 +50,13 @@ function feedbackUi(res) {
     document.getElementById('fm1').classList.add('was-validated')
   }
   else if (code == 1){
-    thanksBox.innerHTML = "You have successfully updated your subscription to email alert";
+    thanksBox.innerHTML = "You have successfully updated your subscription to email alerts";
     thanksBox.classList.add('alert')
     thanksBox.classList.add('alert-primary')
     document.getElementById('fm1').classList.add('was-validated')
   }
   else if (code == 0){
-    thanksBox.innerHTML = "You have successfully unsubscribed to email alert";
+    thanksBox.innerHTML = "You have successfully unsubscribed to email alerts";
     thanksBox.classList.add('alert')
     thanksBox.classList.add('alert-primary')
     document.getElementById('fm1').classList.add('was-validated')
@@ -86,7 +77,7 @@ function rssUrlSubmission() {
   event.preventDefault()
   event.stopPropagation()
   let selected =  getSelected().join(',');
-  post(email, selected)
+  postASubscription(email, selected)
 
   return false;
 }
@@ -107,7 +98,7 @@ function getSelected() {
 
 function addContentToPage(jsonIn) {
   
-  var table = tablesModule.addTableWithRadio(jsonIn, ['Plant', 'Company', 'Fuel', 'Country', 'Tier']);
+  var table = tablesModule.addTableWithRadio(jsonIn, [ 'Company', 'Type', 'Country', 'Tier']);
   document.getElementById('dv1').innerHTML = table;
 }
 
