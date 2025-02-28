@@ -1,3 +1,6 @@
+const email = 'contact@energyearly.com';
+const links = ['Home', 'Subscribe', 'Request', 'Blog', 'Remits'];
+const isOff = false;
 !function (e, t) {
     "use strict";
     "object" == typeof module && "object" == typeof module.exports ? module.exports = e.document ? t(e, !0) : function (e) { if (!e.document)
@@ -880,9 +883,6 @@
     var Jt = e.jQuery, Kt = e.$;
     return w.noConflict = function (t) { return e.$ === w && (e.$ = Kt), t && e.jQuery === w && (e.jQuery = Jt), w; }, t || (e.jQuery = e.$ = w), w;
 });
-const email = 'contact@energyearly.com';
-const links = ['Home', 'Subscribe', 'Request', 'Blog'];
-const isOff = false;
 const FrameModule = {
     footer: function (email) {
         let html = ` <footer>
@@ -1076,6 +1076,463 @@ const tablesModule = {
         return '<table class="T2">' + header + '<tbody>' + htmlRows.join('') + '</tbody></table>';
     },
 };
+function percentageToHsl(percentage, hue0, hue1) {
+    var hue = (percentage * (hue1 - hue0)) + hue0;
+    return 'hsl(' + hue + ', 100%, 50%)';
+}
+function percentageToWhite(percentage, hue0) {
+    var L = 100 - (percentage * 50);
+    return 'hsl(' + hue0 + ', 100%, ' + L + '%)';
+}
+function percentageToWhiteNegativeToo(numerator, dominator, hue0, hue1) {
+    return numerator > 0 ? percentageToWhite(numerator / dominator, hue0) : percentageToWhite(Math.abs(numerator) / dominator, hue1);
+}
+;
+const radioButtonCreate = {
+    setUpEventListenersRadioButton: function setUpEventListenersRadioButton(name, onChange) {
+        document.querySelectorAll(`input[type=radio][name="${name}"]`)
+            .forEach(x => x.addEventListener("input", () => onChange(x.value)));
+    },
+    setUpEventListenersCheckboxButton: function setUpEventListenersRadioButton(name, onChange) {
+        $(`input[name="${name}"]`).change(function () {
+            var v = Array.from($(`input[name='${name}']:checked`)).map((o) => o.value);
+            console.log(v, "v");
+            onChange(v);
+        });
+    },
+    getAnRadioButtonLabelAsValue: function getAnRadioButton(id, label, name, isChecked, className = 'btn-outline-primary') {
+        let checked = id === 0 ? "checked" : "";
+        if (typeof isChecked !== 'undefined')
+            checked = isChecked ? "checked" : "";
+        var radioHtml = `<input class='btn-check ${name}' type='radio' id='${name}${id}' value='${label}' name='${name}' ${checked}/>`;
+        var labelHtml = `<label class='btn ${className}'  for='${name}${id}'>${label}</label>`;
+        return radioHtml + labelHtml;
+    },
+    getAnRadioButtonColour: function getAnRadioButton(id, label, name, isChecked, colour, className = 'btn-outline-primary') {
+        let checked = id === 0 ? "checked" : "";
+        if (typeof isChecked !== 'undefined')
+            checked = isChecked ? "checked" : "";
+        var radioHtml = `<input class='btn-check ${name}' type='radio' id='${name}${id}' value='${label}' name='${name}' ${checked}/>`;
+        var labelHtml = `<label class='btn ${className}'  for='${name}${id}'>${label}</label>`;
+        if (colour !== '')
+            labelHtml = `<label style="--xy:${colour}" class='btn ${className}'  for='${name}${id}'>${label}</label>`;
+        return radioHtml + labelHtml;
+    },
+    getAnRadioButton: function getAnRadioButton(id, label, name, isChecked, className = 'btn-outline-primary') {
+        let checked = id === 0 ? "checked" : "";
+        if (typeof isChecked !== 'undefined')
+            checked = isChecked ? "checked" : "";
+        var radioHtml = `<input class='btn-check ' type='radio' id='${name}${id}' value='${id}' name='${name}' ${checked}/>`;
+        var labelHtml = `<label class='btn ${className}'  for='${name}${id}'>${label}</label>`;
+        return radioHtml + labelHtml;
+    },
+    getAnCheckButton: function (id, label, name, className = 'btn-outline-primary') {
+        let checked = id === 0 ? "checked" : "";
+        var radioHtml = `<input class='btn-check' type='checkbox' id='${name}${id}' value='${id}' name='${name}' ${checked}/>`;
+        var labelHtml = `<label class='btn ${className}'  for='${name}${id}'>${label}</label>`;
+        return radioHtml + labelHtml;
+    }
+};
+;
+function setupRadioButtonFilterHandlerWithKeyLookup(buttonClass, cellClass, options) {
+    $("." + buttonClass).click(function () {
+        var theValue = $(this).val();
+        var key = options[theValue];
+        $('.' + cellClass).hide();
+        $('.' + cellClass + '[data-slider*=' + key + ']').show();
+        console.log("here in the click event");
+    });
+}
+function runTheFilter(buttonClass, cellClass) {
+    let hool = $("." + buttonClass + ".btn-check:checked").toArray().map(o => o.value.replaceAll(' ', '_').toLowerCase());
+    let removedAll = hool.filter(x => x != "all");
+    if (removedAll.length == 0) {
+        $("table[data-all=" + cellClass + "]").show();
+        $("tr[data-all=" + cellClass + "]").show();
+    }
+    else {
+        $("table[data-all=" + cellClass + "]").hide();
+        $("tr[data-all=" + cellClass + "]").hide();
+    }
+    let testing = removedAll.reduce((previousValue, currentValue) => previousValue.filter("[data-unique*='," + currentValue + "']"), $("tr[data-all=" + cellClass + "]"));
+    let testing2 = removedAll.reduce((previousValue, currentValue) => previousValue.filter("[data-unique*='," + currentValue + "']"), $("table[data-all=" + cellClass + "]"));
+    testing.show();
+    testing2.show();
+}
+function setupRadioButtonFilterHandlerWithClassTableRowMultiple(buttonClass, cellClass) {
+    $("." + buttonClass).click(function () {
+        runTheFilter(buttonClass, cellClass);
+    });
+}
+;
+function setupRadioButtonFilterHandlerWithClassTableRow(buttonClass, cellClass) {
+    $("." + buttonClass).click(function () {
+        let theValue = $(this).val().replaceAll(' ', '_').toLowerCase();
+        if (theValue.toLowerCase() == 'all')
+            $("tr[data-all=" + cellClass + "]").show();
+        else
+            $("tr[data-all=" + cellClass + "]").hide();
+        let theValueX = $("tr[data-unique=" + theValue + "]");
+        if (this.checked)
+            $(theValueX).show();
+    });
+}
+;
+function setupRadioButtonFilterHandlerWithClass(buttonClass, cellClass) {
+    $("." + buttonClass).click(function () {
+        let theValue = $(this).val().toLowerCase();
+        if (theValue.toLowerCase() == 'all')
+            $("div[data-all=" + cellClass + "]").show();
+        else
+            $("div[data-all=" + cellClass + "]").hide();
+        let theValueX = $("div[data-unique=" + theValue + "]");
+        if (this.checked)
+            $(theValueX).show();
+    });
+}
+;
+function setupRadioButtonFilterHandlerWithClassMultiple(buttonClass, cellClass) {
+    $("." + buttonClass).click(function () {
+        let hool = $(".btn-check:checked").toArray().map(o => o.value.replaceAll(' ', '_').toLowerCase());
+        let theValue = $(this).val().toLowerCase();
+        let removedAll = hool.filter(x => x != "all");
+        if (removedAll.length == 0)
+            $("div[data-all=" + cellClass + "]").show();
+        else {
+            $("div[data-all=" + cellClass + "]").hide();
+            let testing = removedAll.reduce((previousValue, currentValue) => previousValue.filter("[data-unique*='" + currentValue + "']"), $("div[data-all=" + cellClass + "]"));
+            testing.show();
+        }
+    });
+}
+;
+function hideShowCard(val, cellClass, dataSelector) {
+    let theValue = val.toLowerCase();
+    if (theValue.toLowerCase() == 'false')
+        $("div[data-all=" + cellClass + "]").show();
+    else {
+        $("div[data-all=" + cellClass + "]").hide();
+        let theValueX = $("div[data-" + dataSelector + "=" + val + "]");
+        $(theValueX).show();
+    }
+}
+;
+function addNewToggleButtonFilter() {
+    var checkbox = document.querySelector("input[name=cbIsNewOnly]");
+    if (typeof checkbox != 'undefined') {
+        checkbox.addEventListener('change', function () {
+            if (this.checked) {
+                console.log("Checkbox is checked..");
+                hideShowCard("true", "card", "new");
+            }
+            else {
+                console.log("Checkbox is not checked..");
+                hideShowCard("false", "card", "new");
+            }
+        });
+    }
+}
+function coupledButtonAndInput() {
+    let checkbox = document.querySelector("input[name=cbIsNewOnly]");
+    let element = document.querySelector("#myInput");
+    $("#myInput").on("keyup", function () {
+        console.log("here but");
+    });
+    if (typeof checkbox != 'undefined') {
+        checkbox.addEventListener('change', function () {
+            console.log("Checkbox is here..");
+            element.value = '';
+        });
+    }
+}
+function manageChangeInOrientation(func, elementToObserve, toWatch = '(max-width: 1200px)') {
+    function setIsLandscape() {
+        const mediaQuery = window.matchMedia(toWatch);
+        if (mediaQuery.matches) {
+            console.log("portrait");
+            if (!isLandscape)
+                return false;
+            else
+                isLandscape = false;
+        }
+        else {
+            console.log("landscape");
+            if (isLandscape)
+                return false;
+            else
+                isLandscape = true;
+        }
+        return true;
+    }
+    let isLandscape = false;
+    function setUpPlotObserver() {
+        const plotObserver = new ResizeObserver(entries => {
+            if (setIsLandscape()) {
+                func(isLandscape);
+            }
+        });
+        let tableDiv = document.querySelector(elementToObserve);
+        plotObserver.observe(tableDiv);
+    }
+    ;
+    setUpPlotObserver();
+}
+var countryColors = new Map([
+    ["SY", "#8B4513"],
+    ["UK", "#0000ff"],
+]);
+var fuelColors = new Map([
+    ["Biomass", "#8B4513"],
+    ["Fossil Brown coal/Lignite", "#A52A2A"],
+    ["Fossil Gas", "#4682B4"],
+    ["Fossil Hard coal", "#000000"],
+    ["Fossil Oil", "#FF6347"],
+    ["Hydro Pumped Storage", "#00FF00"],
+    ["Hydro Water Reservoir", "#1E90FF"],
+    ["Nuclear", "#FF00FF"],
+    ["Other", "#D2691E"],
+    ["Other renewable", "#ADFF2F"],
+    ["Wind Offshore", "#00BFFF"],
+    ["Wind Offshore", "#0eBFFF"],
+    ["Gas", "#7FFF00"],
+    ["Coal", "#7FFF00"]
+]);
+var outageTagColours = {
+    'power': 'black',
+    'gas': "#7FFF00",
+};
+let countryTagColours = {
+    'spain': 'red',
+    'norway': 'purple',
+};
+;
+function responsiveView(makeLink) {
+    function formatTable(data) {
+        let table = data.map(o => formatRow(o)).join('');
+        let tb = `<table class="T2 T3">  <thead>
+        <tr>
+        <th>ID</th>
+        <th>UNIT NAME</th>
+        <th>START(UTC)</th>
+        <th>END(UTC)</th>
+        <th>INSTALLED</th>
+        <th>AVAILABLE</th>
+        <th>UNAVAILABLE</th>
+        <th>EVENT TYPE</th>
+        <th>OUTAGE TYPE</th>
+        <th>FUEL TYPE</th>
+        <th>PUBLISHED(UTC)</th>
+        </tr>
+         </thead>
+        ${table}</table>`.split("\n").join('');
+        return tb;
+    }
+    function formatRow(o) {
+        let countryColour = countryColors.get(o.country);
+        let fuelColour = fuelColors.get(o.fuelName);
+        let percentageColour = percentageToWhite(((o.fraction) / 100), 0);
+        let tr = `<tr data-unique=",${o.fuelName.replaceAll(' ', '_').toLowerCase()},${o.unavailabilityType.replaceAll(' ', '_').toLowerCase()}" data-all="card">
+        <td>
+        <a href="${makeLink(o.mrid, o.id)}" target="_blank">${o.id}</a>
+        </td>
+        <td>${o.unit}</td>
+        <td>${o.startDate.replace('T', ' ').replace('Z', ' ')}</td>
+        <td>${o.endDate.replace('T', ' ').replace('Z', ' ')}</td>
+        <td>${o.capacity}</td>
+        <td>${o.available}</td>
+        <td style="background-color: ${percentageColour}" >${o.unavailable}</td>
+        <td>${o.eventType}</td>
+        <td>${o.unavailabilityType}</td>
+        
+        <td style="background-color: ${fuelColour}">${o.fuelName.toUpperCase()}</td>
+        <td>${new Date(o.publishedDate).toISOString().replace('T', ' ').replace('Z', ' ').slice(0, -5)}</td>
+        </tr>`.split("\n").join('');
+        return tr;
+    }
+    function formatLongTable(data) {
+        let tables = data.map(o => formatLongRow(o)).join('');
+        return tables;
+    }
+    function formatLongRow(o) {
+        let countryColour = countryColors.get(o.country);
+        let fuelColour = fuelColors.get(o.fuelName);
+        let percentageColour = percentageToWhite(((o.fraction) / 100), 0);
+        let tr = `
+      <tr>
+      <th>ID</th>
+  
+      <td>
+        <a href="${makeLink(o.mrid, o.id)}" target="_blank">${o.id}</a>
+        </td>
+        <tr></tr>
+        <th>UNIT NAME</th>
+        <td>${o.unit}</td> </tr><tr>
+        <th>START</th>
+        <td>${o.startDate}UTC</td></tr><tr>
+        <th>END</th>
+        <td>${o.endDate}UTC</td></tr><tr>
+        <th>INSTALLED</th>
+        <td>${o.capacity}</td></tr><tr>
+        <th>AVAILABLE</th>
+        <td>${o.available}</td></tr><tr>
+        <th>UNAVAILABLE</th>
+        <td >${o.unavailable}</td></tr><tr>
+        <th>FRACTION</th>
+        <td style="background-color: ${percentageColour}" >${o.fraction}</td></tr><tr>
+        <th>EVENT TYPE</th>
+        <td>${o.eventType}</td></tr><tr>
+        <th>OUTAGE TYPE</th>
+        <td>${o.unavailabilityType}</td></tr><tr>
+        <th>FUEL TYPE</th>
+        <td style="background-color: ${fuelColour}">${o.fuelName}</td></tr><tr>
+        <th>EVENT STATUS</th>
+        <td>${o.eventStatus}</td></tr><tr>
+        <th>mRID</th>
+        <td>${o.mrid}</td></tr><tr>
+        <th>PUBLISHED</th>
+        <td>${new Date(o.publishedDate).toUTCString()}</td></tr>`
+            .split("\n").join('');
+        let tb = `<table style="border-color : ${fuelColour}" data-unique=",${o.fuelName.replaceAll(' ', '_').toLowerCase()},${o.unavailabilityType.replaceAll(' ', '_').toLowerCase()}" data-all="card" class="T2 T3">  
+     
+       <tbody>
+      ${tr} </tbody>
+      </table>`
+            .split("\n").join('');
+        return tb;
+    }
+    return { formatLongTable, formatTable };
+}
+;
+;
+function OutageView() { }
+OutageView.makeTable =
+    function (items) {
+        if (items.length === 0)
+            return '';
+        let tb0 = '<table class="T2" border=3><thead><th>Fuel</th><th>Plant</th><th>Unit</th><th>Capacity (MW)</th><th>Unavailable (MW)</th><th>Available (MW)</th><th>Percent</th><th>Duration</th><th>Start</th><th>End</th><th>Published</th></thead><tbody>';
+        items.forEach(element => {
+            tb0 += '<tr>';
+            tb0 += '<td style="background-color:' + element.colour + 'a9">';
+            tb0 += element.fuelName;
+            tb0 += '</td>';
+            tb0 += '<td>';
+            tb0 += element.plant;
+            tb0 += '</td>';
+            tb0 += '<td>';
+            tb0 += element.unit;
+            tb0 += '</td>';
+            tb0 += '<td>';
+            tb0 += element.capacity;
+            tb0 += '</td>';
+            tb0 += '<td class ="searchText">';
+            tb0 += element.unavailable;
+            tb0 += '</td>';
+            tb0 += '<td>';
+            tb0 += element.available;
+            tb0 += '</td>';
+            tb0 += '<td>';
+            tb0 += element.fraction;
+            tb0 += '</td>';
+            tb0 += '<td>';
+            tb0 += element.duration;
+            tb0 += '</td>';
+            tb0 += '<td>';
+            tb0 += element.startDate.replace('T', ' ');
+            tb0 += '</td>';
+            tb0 += '<td>';
+            tb0 += element.endDate.replace('T', ' ');
+            tb0 += '</td>';
+            tb0 += '<td>';
+            tb0 += element.publishedDate.replace('T', ' ');
+            tb0 += '</td>';
+            tb0 += '</tr>';
+        });
+        tb0 += '</tbody>';
+        return tb0;
+    };
+if (typeof cardView !== 'undefined')
+    OutageView.card = cardView;
+if (typeof inlineCardBView !== 'undefined')
+    OutageView.inlineCardB = inlineCardBView;
+if (typeof inlineCardAView !== 'undefined')
+    OutageView.inlineCardA = inlineCardAView();
+if (typeof emailView !== 'undefined')
+    OutageView.makeEmail = emailView();
+if (typeof responsiveView !== 'undefined')
+    OutageView.responsive = responsiveView;
+const apiUrl = "https://script.google.com/macros/s/AKfycbxiKLEB_xdYuhE6yD5BYQ9o-T8i5mtERx3EJw_WKgmrun5-EykoNi9EWw2SlmdwCefc/exec?tab=";
+function postASuggestion(url, description) {
+    let packet = { key: 'request', data: [{ link: url, description: description }] };
+    let getURL = "https://script.google.com/macros/s/AKfycbxWZSVT7EZxBtavefN_pm4g76Rb9zuASowH-jFp87c7tP1QHGkRXrcl49aNPAzDRgtu/exec";
+    fetch(getURL, {
+        method: 'POST',
+        body: JSON.stringify(packet)
+    })
+        .then(res => res.json())
+        .then(res => {
+        console.log(res);
+        feedbackUi(res);
+    });
+}
+function postASubscription(email, ids) {
+    let packet = { key: 'subscribe', data: [{ email: email, ids: ids }] };
+    let url = "https://script.google.com/macros/s/AKfycby9dqCK8nYtIC9Vfb63yAxp-Rq5PuEcp0U4NtueypnWuteWjqskclSb2TK0CMC1S5Rz/exec";
+    console.log(packet);
+    fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(packet)
+    })
+        .then(res => res.json())
+        .then(res => feedbackUi(res));
+}
+function getJson(url) {
+    $('#dvSpinnerContainer').toggleClass("hiding2", false);
+    $('#dvContainer').toggleClass("hiding2", true);
+    return fetch(url, { method: 'GET' })
+        .then(res => res.json())
+        .then(res => {
+        console.log(res);
+        $('#dvSpinnerContainer').toggleClass("hiding2", true);
+        $('#dvContainer').toggleClass("hiding2", false);
+        return res;
+    });
+}
+function getHome() {
+    let withSpaces = blog.map(o => { return Object.assign(Object.assign({}, o), { txt: o.txt.replaceAll('\n', '<br/>') }); });
+    return Promise.resolve(withSpaces);
+}
+function getBlog() {
+    return Promise.resolve(tempBlog);
+    let url = apiUrl + "blog";
+    return getJson(url);
+}
+function getRemits() {
+    let url = apiUrl + "remit";
+    return getJson(url);
+}
+function getHistory() {
+    let url = apiUrl + "history";
+    return getJson(url);
+}
+function getLatest() {
+    let url = apiUrl + "history";
+    return getJson(url);
+}
+function getSources() {
+    return Promise.resolve(tempSources);
+    let url = apiUrl + "feeds";
+    return fetch(url, {
+        method: 'GET',
+    })
+        .then(res => res.json());
+}
+function getOutages() {
+    let url = "https://script.google.com/macros/s/AKfycbwYlb25MOkKEnxOLmRSmwlL-mnRmIgnPioxVpP4MtFEqfEXUmHAiF5T9EPqMMae_7lR/exec?tab=outages";
+    return fetch(url, {
+        method: 'GET',
+    })
+        .then(res => res.json());
+}
 !function (t, e) { "object" == typeof exports && "undefined" != typeof module ? module.exports = e(require("@popperjs/core")) : "function" == typeof define && define.amd ? define(["@popperjs/core"], e) : (t = "undefined" != typeof globalThis ? globalThis : t || self).bootstrap = e(t.Popper); }(this, (function (t) {
     "use strict";
     function e(t) { if (t && t.__esModule)
@@ -1615,76 +2072,3 @@ const tablesModule = {
     }
     return w(Gt), { Alert: U, Button: q, Carousel: J, Collapse: st, Dropdown: ut, Modal: At, Offcanvas: Ct, Popover: Ft, ScrollSpy: Vt, Tab: Qt, Toast: Gt, Tooltip: Bt };
 }));
-const apiUrl = "https://script.google.com/macros/s/AKfycbxiKLEB_xdYuhE6yD5BYQ9o-T8i5mtERx3EJw_WKgmrun5-EykoNi9EWw2SlmdwCefc/exec?tab=";
-function postASuggestion(url, description) {
-    let packet = { key: 'request', data: [{ link: url, description: description }] };
-    let getURL = "https://script.google.com/macros/s/AKfycbxWZSVT7EZxBtavefN_pm4g76Rb9zuASowH-jFp87c7tP1QHGkRXrcl49aNPAzDRgtu/exec";
-    fetch(getURL, {
-        method: 'POST',
-        body: JSON.stringify(packet)
-    })
-        .then(res => res.json())
-        .then(res => {
-        console.log(res);
-        feedbackUi(res);
-    });
-}
-function postASubscription(email, ids) {
-    let packet = { key: 'subscribe', data: [{ email: email, ids: ids }] };
-    let url = "https://script.google.com/macros/s/AKfycby9dqCK8nYtIC9Vfb63yAxp-Rq5PuEcp0U4NtueypnWuteWjqskclSb2TK0CMC1S5Rz/exec";
-    console.log(packet);
-    fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(packet)
-    })
-        .then(res => res.json())
-        .then(res => feedbackUi(res));
-}
-function getJson(url) {
-    $('#dvSpinnerContainer').toggleClass("hiding2", false);
-    $('#dvContainer').toggleClass("hiding2", true);
-    return fetch(url, { method: 'GET' })
-        .then(res => res.json())
-        .then(res => {
-        console.log(res);
-        $('#dvSpinnerContainer').toggleClass("hiding2", true);
-        $('#dvContainer').toggleClass("hiding2", false);
-        return res;
-    });
-}
-function getHome() {
-    let withSpaces = blog.map(o => { return Object.assign(Object.assign({}, o), { txt: o.txt.replaceAll('\n', '<br/>') }); });
-    return Promise.resolve(withSpaces);
-}
-function getBlog() {
-    return Promise.resolve(tempBlog);
-    let url = apiUrl + "blog";
-    return getJson(url);
-}
-function getRemits() {
-    let url = apiUrl + "remit";
-    return getJson(url);
-}
-function getHistory() {
-    let url = apiUrl + "history";
-    return getJson(url);
-}
-function getLatest() {
-    let url = apiUrl + "history";
-    return getJson(url);
-}
-function getSources() {
-    return Promise.resolve(tempSources);
-    let url = apiUrl + "feeds";
-    return fetch(url, {
-        method: 'GET',
-    })
-        .then(res => res.json());
-}
-function getOutages() {
-    let url = "https://script.google.com/macros/s/AKfycbwYlb25MOkKEnxOLmRSmwlL-mnRmIgnPioxVpP4MtFEqfEXUmHAiF5T9EPqMMae_7lR/exec?tab=outages";
-    return fetch(url, {
-        method: 'GET',
-    })
-        .then(res => res.json());
-}

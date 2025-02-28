@@ -280,4 +280,197 @@ table.T2  {
 table.T3 {
     margin-bottom: 7px;
     table-layout: auto;
+}:root[data-applied-mode="dark"] {
+  --main-color: rgb(48, 52, 53);
+  --main-bg-color:#f7c2c1; 
+
+  --second-bg-color :#c97675; 
+  --third-bg-color: rgb(59, 59, 59);
+  --third-color: #b96260;
+
+  --textA: rgb(240, 232, 235);
+  --dashplease: rgb(255, 246, 230);
+
+  --tbBackground: rgba(41, 41, 41, 0.8);
+  --tdBorder: rgb(95, 95, 94);
+
+  --thBorder: rgb(71, 207, 237);
+  --thBackground: rgb(48, 52, 53);
+
+  --tdBorder: rgb(95, 95, 94);
+  --tdColor: rgb(255, 246, 230);
+
+  --aColor  :rgb(235, 231, 231);
+  --aHoverColor : rgb(184, 180, 180);
+  --btn-outline : 136, 133, 151;
+  --swBackgroundOff :rgb(200, 219, 33);
+  --swBackgroundOn :rgb(219, 107, 33);
+}
+
+:root {
+  --main-color: #2e3031;
+  --main-bg-color: #6db3db;
+  --main-bg-color: #fbfdff;
+
+  --second-colour : #e48583; 
+  --second-bg-color: rgba(230, 224, 224, 0.918);
+
+  --third-bg-color: rgb(59, 59, 59);
+  --third-color: rgb(48, 42, 42);
+
+  --textA:  rgb(14, 14, 14);
+  --dashplease: rgb(255, 246, 230);
+
+  --tbBackground: white;
+  --tdBorder: rgb(159, 159, 16);
+
+  --thBorder: lightblue;
+  --thBackground: white;
+
+  --tdBorder: rgb(165, 170, 169);
+  --tdColor: rgb(48, 52, 53);
+
+  --aColor  :rgb(122, 122, 122);
+  --aHoverColor : rgb(14, 14, 14);
+
+  --btn-outline : 33, 107, 219;
+  --btn-outline2 : rgb(33, 107, 219);
+  --swBackgroundOff :rgb(33, 219, 95);
+  --swBackgroundOn :rgb(219, 33, 142);
+}
+.loader {
+    border: 12px solid #f3f3f3;
+    border-top: 12px solid #3498db;
+    border-radius: 50%;
+    height:  100px;
+    aspect-ratio: 1 / 1;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#dvSpinnerContainer{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#dvButtons>.btn-check:checked+.btn-outline-primary
+{
+    background-color: var(--xy)
+}
+
+#dvButtons>.btn-outline-primary:hover  
+{
+    background-color: var(--xy)
+}
+
+#dvMenuButtons>.btn-check:checked+.btn-outline-primary
+{
+    background-color: var(--xy)
+}
+
+#dvMenuButtons>.btn-outline-primary:hover  
+{
+    background-color: var(--xy)
+}/* coloursVar.css */
+#dvButtons>.btn-check:checked+.btn-outline-success
+{
+    background-color: var(--xy, rgba(var(--btn-outline)));
+}
+
+#dvButtons>.btn-outline-success:hover  
+{
+    background-color: var(--xy, rgba(var(--btn-outline)))
+}
+
+#dvMenuButtons>.btn-check:checked+.btn-outline-success
+{
+    background-color: var(--xy, rgba(var(--btn-outline)))
+}
+
+#dvMenuButtons>.btn-outline-success:hover  
+{
+    background-color: var(--xy, rgba(var(--btn-outline)))
+}
+
+body {
+    background-color: var(--main-bg-color);
+}
+
+h2 {
+    color: var(--third-color);
+}
+
+.card {
+    color: var(--main-color)
+}
+
+
+.btn-check:focus+.btn-outline-success,
+.btn-outline-success:focus {
+    box-shadow: 0 0 0 0.25rem rgba(var(--btn-outline), 0.5);
+}
+
+.btn-check:checked+.btn-outline-success:focus,
+.btn-outline-success:focus {
+    box-shadow: 0 0 0 0.25rem rgba(var(--btn-outline), 0.5);
+}
+
+.btn-outline-success:hover {
+    background-color: rgb(var(--btn-outline));
+    border-color: rgb(var(--btn-outline));
+}
+
+.btn-check:active+.btn-outline-success,
+.btn-check:checked+.btn-outline-success,
+.btn-outline-success.active,
+.btn-outline-success.dropdown-toggle.show,
+.btn-outline-success:active {
+    background-color: rgb(var(--btn-outline));
+    border-color: rgb(var(--btn-outline));
+}
+
+.btn-outline-success {
+    color: rgb(var(--btn-outline));
+    border-color: rgb(var(--btn-outline));
+}
+
+footer .content-bottom .footer-references a {
+    color: var(--aColor);
+    ;
+}
+
+footer .content-bottom .footer-references a:hover {
+    color: var(--aHoverColor);
+}
+
+header {
+
+    background-color: var(--second-bg-color);
+    border-bottom: 1px solid rgba(39, 202, 80, 0.1);
+}
+
+footer .content-bottom {
+    background-color: var(--second-bg-color);
+    color: var(--textA);
+    /* background-color: rgb(255 255 255 / 43%); */
+    /* border-top: 1px solid rgb(26 120 97 / 90%); */
+}
+
+.secondary-colour {
+    background-color: var(--second-bg-color);
+}
+
+.other-bg-color {
+    background-color: var(--third-bg-color);
 }
