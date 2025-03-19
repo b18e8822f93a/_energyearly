@@ -1,5 +1,5 @@
 const email = 'contact@energyearly.com';
-const links = ['Home', 'Subscribe', 'Request', 'Blog', 'Remits'];
+const links = ['Home', 'Subscribe', 'Request', 'Blog', 'Remits', 'Entsoe'];
 const isOff = false;
 !function (e, t) {
     "use strict";
@@ -1309,7 +1309,9 @@ let countryTagColours = {
 function responsiveView(makeLink) {
     function formatTable(data) {
         let table = data.map(o => formatRow(o)).join('');
-        let tb = `<table class="T2 T3">  <thead>
+        let tb = `
+        <table class="T2 T3">
+        <thead>
         <tr>
         <th>ID</th>
         <th>UNIT NAME</th>
@@ -1323,7 +1325,7 @@ function responsiveView(makeLink) {
         <th>FUEL TYPE</th>
         <th>PUBLISHED(UTC)</th>
         </tr>
-         </thead>
+        </thead>
         ${table}</table>`.split("\n").join('');
         return tb;
     }
@@ -1333,7 +1335,7 @@ function responsiveView(makeLink) {
         let percentageColour = percentageToWhite(((o.fraction) / 100), 0);
         let tr = `<tr data-unique=",${o.fuelName.replaceAll(' ', '_').toLowerCase()},${o.unavailabilityType.replaceAll(' ', '_').toLowerCase()}" data-all="card">
         <td>
-        <a href="${makeLink(o.mrid, o.id)}" target="_blank">${o.id}</a>
+        <a href="${makeLink(o)}" target="_blank">${o.id}</a>
         </td>
         <td>${o.unit}</td>
         <td>${o.startDate.replace('T', ' ').replace('Z', ' ')}</td>
@@ -1362,7 +1364,7 @@ function responsiveView(makeLink) {
       <th>ID</th>
   
       <td>
-        <a href="${makeLink(o.mrid, o.id)}" target="_blank">${o.id}</a>
+        <a href="${makeLink(o)}" target="_blank">${o.id}</a>
         </td>
         <tr></tr>
         <th>UNIT NAME</th>
@@ -1460,6 +1462,47 @@ if (typeof emailView !== 'undefined')
     OutageView.makeEmail = emailView();
 if (typeof responsiveView !== 'undefined')
     OutageView.responsive = responsiveView;
+let jsonHold;
+function getContent() {
+    let html = `
+      <div class="container p-1 mt-1 mb-2">
+          <div id="dvMenuButtons" class="btn-group btn-group-sm btn-group-justified w-100 d-flex flex-md-row flex-column w-100 p-1 " role="group">
+          </div>
+           <div id="dvMenuButtons2" class="btn-group btn-group-sm btn-group-justified w-100" role="group">
+          </div>
+        </div>
+      <div id="dvListings"></div>`;
+    console.log(html, "here html");
+    return html;
+}
+let func = isLandscape => {
+    console.log("here in func");
+    document.getElementById('dvListings').innerHTML = getContentWithJson(jsonHold, isLandscape);
+    runTheFilter('card');
+};
+function onPageLoaded() {
+    requestFunction()
+        .then(res => {
+        jsonHold = res;
+        fuels = ['ALL', ...new Set(res.map(o => o.fuelName).filter(x => x !== ""))];
+        fuels2 = ['ALL', ...new Set(res.map(o => o.unavailabilityType).filter(x => x !== ""))];
+        const subsetLabelColors = new Map([...fuelColors].filter(([label, color]) => fuels.includes(label)));
+        console.log(subsetLabelColors);
+        console.log(fuels);
+        let radioButtons = [['All', 'Blue'], ...subsetLabelColors].map((x, i) => radioButtonCreate.getAnRadioButtonColour(i, x[0], 'rbIndustry', i === 0 ? 'checked' : '', x[1])).join('');
+        let radioButtons2 = fuels2.map((x, i) => radioButtonCreate.getAnRadioButtonLabelAsValue(i, x, 'rbIndustry2', i === 0 ? 'checked' : '', 'btn-outline-success')).join('');
+        document.getElementById('dvMenuButtons').innerHTML = radioButtons;
+        document.getElementById('dvMenuButtons2').innerHTML = radioButtons2;
+        document.getElementById('dvListings').innerHTML = getContentWithJson(res);
+        setupRadioButtonFilterHandlerWithClassTableRowMultiple('rbIndustry', 'card');
+        setupRadioButtonFilterHandlerWithClassTableRowMultiple('rbIndustry2', 'card');
+        manageChangeInOrientation(func, '#dvHeader');
+    });
+}
+function getContentWithJson(jsonIn, isLandscape = false) {
+    console.log(jsonIn[0]);
+    return isLandscape ? OutageView.responsive(link).formatTable(jsonIn) : OutageView.responsive(link).formatLongTable(jsonIn);
+}
 const apiUrl = "https://script.google.com/macros/s/AKfycbxiKLEB_xdYuhE6yD5BYQ9o-T8i5mtERx3EJw_WKgmrun5-EykoNi9EWw2SlmdwCefc/exec?tab=";
 function postASuggestion(url, description) {
     let packet = { key: 'request', data: [{ link: url, description: description }] };
@@ -1521,6 +1564,13 @@ function getLatest() {
 function getSources() {
     return Promise.resolve(tempSources);
     let url = apiUrl + "feeds";
+    return fetch(url, {
+        method: 'GET',
+    })
+        .then(res => res.json());
+}
+function getEntsoe() {
+    let url = "https://script.google.com/macros/s/AKfycbyXCczigh-WebNYep4sektlkYjHKF_GQUgpHBl08KMlhzuwuDMxrwewYsb1yXjI5jiT/exec?tab=entsoe";
     return fetch(url, {
         method: 'GET',
     })

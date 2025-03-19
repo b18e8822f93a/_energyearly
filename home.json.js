@@ -21,7 +21,7 @@ const blog = [
         
         Specifically an accurate dataset of the current availability and clear notifications when that availability changes.
         
-        Changes in the format or endpoint of the underlying data source can occur quite frequently, with effective monitoring we are quickly alerted to such changes and through the adoption of modern software practices and patterns we can quickly deploy the required fixes so as to be transparent to you.
+        Changes in the format or endpoint of the underlying data source can occur quite frequently, with effective monitoring we are quickly alerted to such changes and through the adoption of modern software best practices and patterns we can quickly test and deploy required fixes.
         
         <span class="word">Making sure you dont miss an event</span> or use stale data, we believe there is value in getting this right.
         `,
