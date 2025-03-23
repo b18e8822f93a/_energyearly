@@ -19,14 +19,14 @@ var tempSources = [
     //     "country": "Norway",
     //     "tier": "Free"
     // },
-    // {
-    //     "id": 2,
-    //     "link": "https://transparency.entsoe.eu/outage-domain/r2/unavailabilityOfProductionAndGenerationUnits/show?area.values=CTY|10YES-REE------0!CTA|10YES-REE------0&assetType.values=PU&assetType.values=GU&outageType.values=A54&outageType.values=A53&outageStatus.values=A05&masterDataFilterName=&masterDataFilterCode=&dv-datatable_length=10",
-    //     "title": "Spain Outages - Entsoe",
-    //     "plant": "All Power",
-    //     "company": "Red Eléctrica",
-    //     "fuel": "Power",
-    //     "country": "Spain",
-    //     "tier": "Free"
-    // }
+    {
+        "id": 2,
+        "link": "https://transparency.entsoe.eu/outage-domain/r2/unavailabilityOfProductionAndGenerationUnits/show?area.values=CTY|10YES-REE------0!CTA|10YES-REE------0&assetType.values=PU&assetType.values=GU&outageType.values=A54&outageType.values=A53&masterDataFilterName=&masterDataFilterCode=&dv-datatable_length=10",
+        "title": "Spain Outages - Entsoe",
+        "plant": "All Power",
+        "company": "Red Eléctrica",
+        "type": "Power",
+        "country": "Spain",
+        "tier": "Free"
+    }
 ]

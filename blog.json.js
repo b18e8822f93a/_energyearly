@@ -12,7 +12,7 @@ const tempBlog = [
         </br></br>
         Please feel free to subscribe to our current offerings or make a request for other sources you require.
         `,
-        "date": "March 1st 2024",
+        "date": "March 1st 2025",
         "tag1": "UK",
         "tag2": "POWER",
     },
@@ -23,12 +23,12 @@ const tempBlog = [
     //     "tag1": "Norway",
     //     "tag2": "Gas",
     // },
-    // {
-    //     "title": "Adding outage data for Spain from the Entsoe transparency",
-    //     "txt": "Volatility within power prices has increased across europe, particularly in Spain as a result we've had some requests for alerts to be created for spainish power plants outages. \n</br></br>The spainish TSO, Red Eléctrica, publish their outage messages to the Entsoe transparency platform, our automated system keeps an eye these updates in real time and generates clear and simple email alerts directly.",
-    //     "date": "August 1st 2024",
-    //     "tag1": "Spain",
-    //     "tag2": "Power",
-    // },
+    {
+        "title": "Adding outage data for Spain from the Entsoe transparency",
+        "txt": "Volatility within power prices has increased across Europe, particularly in Spain, as a result we've had some requests for alerts to be created for Spainish power plants outages.</br></br>The Spanish TSO, Red Eléctrica, publish their outage messages via the Entsoe transparency platform, our automated system keeps track of these updates and generates clear and simple email alerts directly.",
+        "date": "March 23rd 2025",
+        "tag1": "Spain",
+        "tag2": "Power",
+    },
     
 ]

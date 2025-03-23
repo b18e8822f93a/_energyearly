@@ -1309,9 +1309,7 @@ let countryTagColours = {
 function responsiveView(makeLink) {
     function formatTable(data) {
         let table = data.map(o => formatRow(o)).join('');
-        let tb = `
-        <table class="T2 T3">
-        <thead>
+        let tb = `<table class="T2 T3">  <thead>
         <tr>
         <th>ID</th>
         <th>UNIT NAME</th>
@@ -1325,7 +1323,7 @@ function responsiveView(makeLink) {
         <th>FUEL TYPE</th>
         <th>PUBLISHED(UTC)</th>
         </tr>
-        </thead>
+         </thead>
         ${table}</table>`.split("\n").join('');
         return tb;
     }
@@ -1335,7 +1333,7 @@ function responsiveView(makeLink) {
         let percentageColour = percentageToWhite(((o.fraction) / 100), 0);
         let tr = `<tr data-unique=",${o.fuelName.replaceAll(' ', '_').toLowerCase()},${o.unavailabilityType.replaceAll(' ', '_').toLowerCase()}" data-all="card">
         <td>
-        <a href="${makeLink(o)}" target="_blank">${o.id}</a>
+        <a href="${makeLink(o.mrid, o.id)}" target="_blank">${o.id}</a>
         </td>
         <td>${o.unit}</td>
         <td>${o.startDate.replace('T', ' ').replace('Z', ' ')}</td>
@@ -1364,7 +1362,7 @@ function responsiveView(makeLink) {
       <th>ID</th>
   
       <td>
-        <a href="${makeLink(o)}" target="_blank">${o.id}</a>
+        <a href="${makeLink(o.mrid, o.id)}" target="_blank">${o.id}</a>
         </td>
         <tr></tr>
         <th>UNIT NAME</th>
