@@ -1333,7 +1333,7 @@ function responsiveView(makeLink) {
         let percentageColour = percentageToWhite(((o.fraction) / 100), 0);
         let tr = `<tr data-unique=",${o.fuelName.replaceAll(' ', '_').toLowerCase()},${o.unavailabilityType.replaceAll(' ', '_').toLowerCase()}" data-all="card">
         <td>
-        <a href="${makeLink(o.mrid, o.id)}" target="_blank">${o.id}</a>
+        <a href="${makeLink(o)}" target="_blank">${o.id}</a>
         </td>
         <td>${o.unit}</td>
         <td>${o.startDate.replace('T', ' ').replace('Z', ' ')}</td>
