@@ -1410,10 +1410,7 @@ function getContent() {
       <div class="container p-1 mt-1 mb-2">
           <div id="dvMenuButtons" class="btn-group btn-group-sm btn-group-justified w-100 d-flex flex-md-row flex-column w-100 p-1 " role="group">
           </div>
-          <div id="dvMenuButtons2" class="btn-group btn-group-sm btn-group-justified w-100 d-flex flex-md-row flex-column w-100 p-1 " role="group">
-          </div>
-          <div id="dvMenuButtons3" class="btn-group btn-group-sm btn-group-justified w-100 d-flex flex-md-row flex-column w-100 p-1 " role="group">
-          </div>
+        
         </div>
       <div id="dvListings"></div>`;
     console.log(html, "here html");
@@ -1435,15 +1432,9 @@ function onPageLoaded() {
         console.log(subsetLabelColors);
         console.log(fuels);
         let radioButtons = [['All', 'Blue'], ...subsetLabelColors].map((x, i) => radioButtonCreate.getAnRadioButtonColour(i, x[0], 'rbIndustry', i === 0 ? 'checked' : '', x[1])).join('');
-        let radioButtons2 = fuels2.map((x, i) => radioButtonCreate.getAnRadioButtonLabelAsValue(i, x, 'rbIndustry2', i === 0 ? 'checked' : '', 'btn-outline-success')).join('');
-        let radioButtons3 = statusus.map((x, i) => radioButtonCreate.getAnRadioButtonLabelAsValue(i, x, 'rbIndustry3', i === 0 ? 'checked' : '', 'btn-outline-success')).join('');
         document.getElementById('dvMenuButtons').innerHTML = radioButtons;
-        document.getElementById('dvMenuButtons2').innerHTML = radioButtons2;
-        document.getElementById('dvMenuButtons3').innerHTML = radioButtons3;
         document.getElementById('dvListings').innerHTML = getContentWithJson(res);
         setupRadioButtonFilterHandlerWithClassTableRowMultiple('rbIndustry', 'card');
-        setupRadioButtonFilterHandlerWithClassTableRowMultiple('rbIndustry2', 'card');
-        setupRadioButtonFilterHandlerWithClassTableRowMultiple('rbIndustry3', 'card');
         manageChangeInOrientation(func, '#dvHeader');
     });
 }
