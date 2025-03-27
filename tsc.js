@@ -1320,6 +1320,7 @@ function responsiveView(makeLink) {
         <th>UNAVAILABLE</th>
         <th>EVENT TYPE</th>
         <th>OUTAGE TYPE</th>
+        <th>STATUS</th>
         <th>FUEL TYPE</th>
         <th>PUBLISHED(UTC)</th>
         </tr>
@@ -1331,7 +1332,7 @@ function responsiveView(makeLink) {
         let countryColour = countryColors.get(o.country);
         let fuelColour = fuelColors.get(o.fuelName);
         let percentageColour = percentageToWhite(((o.fraction) / 100), 0);
-        let tr = `<tr data-unique=",${o.fuelName.replaceAll(' ', '_').toLowerCase()},${o.unavailabilityType.replaceAll(' ', '_').toLowerCase()}" data-all="card">
+        let tr = `<tr data-unique=",${o.eventStatus.replaceAll(' ', '_').toLowerCase()},${o.fuelName.replaceAll(' ', '_').toLowerCase()},${o.unavailabilityType.replaceAll(' ', '_').toLowerCase()}" data-all="card">
         <td>
         <a href="${makeLink(o)}" target="_blank">${o.id}</a>
         </td>
@@ -1343,7 +1344,7 @@ function responsiveView(makeLink) {
         <td style="background-color: ${percentageColour}" >${o.unavailable}</td>
         <td>${o.eventType}</td>
         <td>${o.unavailabilityType}</td>
-        
+        <td>${o.eventStatus}</td>
         <td style="background-color: ${fuelColour}">${o.fuelName.toUpperCase()}</td>
         <td>${new Date(o.publishedDate).toISOString().replace('T', ' ').replace('Z', ' ').slice(0, -5)}</td>
         </tr>`.split("\n").join('');
@@ -1362,7 +1363,7 @@ function responsiveView(makeLink) {
       <th>ID</th>
   
       <td>
-        <a href="${makeLink(o.mrid, o.id)}" target="_blank">${o.id}</a>
+        <a href="${makeLink(o)}" target="_blank">${o.id}</a>
         </td>
         <tr></tr>
         <th>UNIT NAME</th>
@@ -1392,7 +1393,7 @@ function responsiveView(makeLink) {
         <th>PUBLISHED</th>
         <td>${new Date(o.publishedDate).toUTCString()}</td></tr>`
             .split("\n").join('');
-        let tb = `<table style="border-color : ${fuelColour}" data-unique=",${o.fuelName.replaceAll(' ', '_').toLowerCase()},${o.unavailabilityType.replaceAll(' ', '_').toLowerCase()}" data-all="card" class="T2 T3">  
+        let tb = `<table style="border-color : ${fuelColour}" data-unique=",${o.eventStatus.replaceAll(' ', '_').toLowerCase()},${o.fuelName.replaceAll(' ', '_').toLowerCase()},${o.unavailabilityType.replaceAll(' ', '_').toLowerCase()}" data-all="card" class="T2 T3">  
      
        <tbody>
       ${tr} </tbody>
@@ -1403,70 +1404,15 @@ function responsiveView(makeLink) {
     return { formatLongTable, formatTable };
 }
 ;
-;
-function OutageView() { }
-OutageView.makeTable =
-    function (items) {
-        if (items.length === 0)
-            return '';
-        let tb0 = '<table class="T2" border=3><thead><th>Fuel</th><th>Plant</th><th>Unit</th><th>Capacity (MW)</th><th>Unavailable (MW)</th><th>Available (MW)</th><th>Percent</th><th>Duration</th><th>Start</th><th>End</th><th>Published</th></thead><tbody>';
-        items.forEach(element => {
-            tb0 += '<tr>';
-            tb0 += '<td style="background-color:' + element.colour + 'a9">';
-            tb0 += element.fuelName;
-            tb0 += '</td>';
-            tb0 += '<td>';
-            tb0 += element.plant;
-            tb0 += '</td>';
-            tb0 += '<td>';
-            tb0 += element.unit;
-            tb0 += '</td>';
-            tb0 += '<td>';
-            tb0 += element.capacity;
-            tb0 += '</td>';
-            tb0 += '<td class ="searchText">';
-            tb0 += element.unavailable;
-            tb0 += '</td>';
-            tb0 += '<td>';
-            tb0 += element.available;
-            tb0 += '</td>';
-            tb0 += '<td>';
-            tb0 += element.fraction;
-            tb0 += '</td>';
-            tb0 += '<td>';
-            tb0 += element.duration;
-            tb0 += '</td>';
-            tb0 += '<td>';
-            tb0 += element.startDate.replace('T', ' ');
-            tb0 += '</td>';
-            tb0 += '<td>';
-            tb0 += element.endDate.replace('T', ' ');
-            tb0 += '</td>';
-            tb0 += '<td>';
-            tb0 += element.publishedDate.replace('T', ' ');
-            tb0 += '</td>';
-            tb0 += '</tr>';
-        });
-        tb0 += '</tbody>';
-        return tb0;
-    };
-if (typeof cardView !== 'undefined')
-    OutageView.card = cardView;
-if (typeof inlineCardBView !== 'undefined')
-    OutageView.inlineCardB = inlineCardBView;
-if (typeof inlineCardAView !== 'undefined')
-    OutageView.inlineCardA = inlineCardAView();
-if (typeof emailView !== 'undefined')
-    OutageView.makeEmail = emailView();
-if (typeof responsiveView !== 'undefined')
-    OutageView.responsive = responsiveView;
 let jsonHold;
 function getContent() {
     let html = `
       <div class="container p-1 mt-1 mb-2">
           <div id="dvMenuButtons" class="btn-group btn-group-sm btn-group-justified w-100 d-flex flex-md-row flex-column w-100 p-1 " role="group">
           </div>
-           <div id="dvMenuButtons2" class="btn-group btn-group-sm btn-group-justified w-100" role="group">
+          <div id="dvMenuButtons2" class="btn-group btn-group-sm btn-group-justified w-100 d-flex flex-md-row flex-column w-100 p-1 " role="group">
+          </div>
+          <div id="dvMenuButtons3" class="btn-group btn-group-sm btn-group-justified w-100 d-flex flex-md-row flex-column w-100 p-1 " role="group">
           </div>
         </div>
       <div id="dvListings"></div>`;
@@ -1484,22 +1430,26 @@ function onPageLoaded() {
         jsonHold = res;
         fuels = ['ALL', ...new Set(res.map(o => o.fuelName).filter(x => x !== ""))];
         fuels2 = ['ALL', ...new Set(res.map(o => o.unavailabilityType).filter(x => x !== ""))];
+        let statusus = ['ALL', ...new Set(res.map(o => o.eventStatus).filter(x => x !== ""))];
         const subsetLabelColors = new Map([...fuelColors].filter(([label, color]) => fuels.includes(label)));
         console.log(subsetLabelColors);
         console.log(fuels);
         let radioButtons = [['All', 'Blue'], ...subsetLabelColors].map((x, i) => radioButtonCreate.getAnRadioButtonColour(i, x[0], 'rbIndustry', i === 0 ? 'checked' : '', x[1])).join('');
         let radioButtons2 = fuels2.map((x, i) => radioButtonCreate.getAnRadioButtonLabelAsValue(i, x, 'rbIndustry2', i === 0 ? 'checked' : '', 'btn-outline-success')).join('');
+        let radioButtons3 = statusus.map((x, i) => radioButtonCreate.getAnRadioButtonLabelAsValue(i, x, 'rbIndustry3', i === 0 ? 'checked' : '', 'btn-outline-success')).join('');
         document.getElementById('dvMenuButtons').innerHTML = radioButtons;
         document.getElementById('dvMenuButtons2').innerHTML = radioButtons2;
+        document.getElementById('dvMenuButtons3').innerHTML = radioButtons3;
         document.getElementById('dvListings').innerHTML = getContentWithJson(res);
         setupRadioButtonFilterHandlerWithClassTableRowMultiple('rbIndustry', 'card');
         setupRadioButtonFilterHandlerWithClassTableRowMultiple('rbIndustry2', 'card');
+        setupRadioButtonFilterHandlerWithClassTableRowMultiple('rbIndustry3', 'card');
         manageChangeInOrientation(func, '#dvHeader');
     });
 }
 function getContentWithJson(jsonIn, isLandscape = false) {
     console.log(jsonIn[0]);
-    return isLandscape ? OutageView.responsive(link).formatTable(jsonIn) : OutageView.responsive(link).formatLongTable(jsonIn);
+    return isLandscape ? responsiveView(link).formatTable(jsonIn) : responsiveView(link).formatLongTable(jsonIn);
 }
 const apiUrl = "https://script.google.com/macros/s/AKfycbxiKLEB_xdYuhE6yD5BYQ9o-T8i5mtERx3EJw_WKgmrun5-EykoNi9EWw2SlmdwCefc/exec?tab=";
 function postASuggestion(url, description) {
@@ -1551,14 +1501,6 @@ function getRemits() {
     let url = apiUrl + "remit";
     return getJson(url);
 }
-function getHistory() {
-    let url = apiUrl + "history";
-    return getJson(url);
-}
-function getLatest() {
-    let url = apiUrl + "history";
-    return getJson(url);
-}
 function getSources() {
     return Promise.resolve(tempSources);
     let url = apiUrl + "feeds";
@@ -1569,17 +1511,7 @@ function getSources() {
 }
 function getEntsoe() {
     let url = "https://script.google.com/macros/s/AKfycbyXCczigh-WebNYep4sektlkYjHKF_GQUgpHBl08KMlhzuwuDMxrwewYsb1yXjI5jiT/exec?tab=entsoe";
-    return fetch(url, {
-        method: 'GET',
-    })
-        .then(res => res.json());
-}
-function getOutages() {
-    let url = "https://script.google.com/macros/s/AKfycbwYlb25MOkKEnxOLmRSmwlL-mnRmIgnPioxVpP4MtFEqfEXUmHAiF5T9EPqMMae_7lR/exec?tab=outages";
-    return fetch(url, {
-        method: 'GET',
-    })
-        .then(res => res.json());
+    return getJson(url);
 }
 !function (t, e) { "object" == typeof exports && "undefined" != typeof module ? module.exports = e(require("@popperjs/core")) : "function" == typeof define && define.amd ? define(["@popperjs/core"], e) : (t = "undefined" != typeof globalThis ? globalThis : t || self).bootstrap = e(t.Popper); }(this, (function (t) {
     "use strict";
