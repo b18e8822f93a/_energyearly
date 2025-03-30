@@ -6,7 +6,7 @@ var tempSources = [
         "plant": "Nyhamna",
         "company": "Elexon",
         "type": "Power",
-        "country": "UK",
+        "country": "GB",
         "tier": "Free"
     },
     // {
@@ -27,6 +27,16 @@ var tempSources = [
         "company": "Red Eléctrica",
         "type": "Power",
         "country": "Spain",
+        "tier": "Free"
+    },
+    {
+        "id": 3,
+        "link": "https://iip.cloud-rte-france.com/production-unavailability",
+        "title": "French Outages - RTE",
+        "plant": "Nuclear Power",
+        "company": "RTE",
+        "type": "Power",
+        "country": "France",
         "tier": "Free"
     }
 ]
