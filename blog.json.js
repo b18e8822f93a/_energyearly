@@ -30,5 +30,14 @@ const tempBlog = [
         "tag1": "Spain",
         "tag2": "Power",
     },
+    {
+        "title": "Adding outage data for France from the RTE Production unavailability",
+        "txt": `We found a relatively easy to digest RSS feed for the latest outages in France, so we've included this in our offerings. Again this included in free tier, visit the subscription page to subscribe. <br/>  <br/> We are finding that each of the data sources provide different fields e.g. comments, description, notes, so a good deal of our work is to reconcile the different forms of the data to bring them into a single outage type, which you can see in the data source pages in this site or in the email alerts.
+    </br></br>This standard form should make it easier to read these messages and in time to process via an API`,     
+        
+        "date": "March 23rd 2025",
+        "tag1": "France",
+        "tag2": "Power",
+    },
     
 ]
