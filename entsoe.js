@@ -1,7 +1,7 @@
 ;//entsoe.js
 const btId = 'Entsoe'
 const getHeader = () => 'Spanish Outages - Today Only';
-const getTitle = () => 'EnergyEarly - Entsoe';
+const getTitle = () => 'EnergyEarly - Entsoe Outages';
 
 function link(o) {
   return  function (record) {
